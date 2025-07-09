@@ -1,0 +1,46 @@
+[
+  {
+    "mc_number":"MC-1660675 -C",
+    "company_name":"RED TRANSPORT LLC",
+    "state":"OR",
+    "decision_date":"2025-06-18",
+    "register_date":"2025-07-07",
+    "is_new_mc":true,
+    "usdot_status":"ACTIVE",
+    "insurance": {
+    "insurance_link":"http:\/\/li-public.fmcsa.dot.gov\/LIVIEW\/pkg_carrquery.prc_carrlist?n_dotno=4274639&s_prefix=MC&n_docketno=&s_legalname=&s_dbaname=&s_state=",
+    "Insurance Required_cargo":"NO",
+    "Insurance Required_on_file_cargo":"NO",
+    "Insurance Required_bond":"NO",
+    "Insurance Required_on_file_bond":"NO",
+    "Insurance Required_BIPD":"$750,000",
+    "Insurance Required_on_file_BIPD":"$750,000",
+    "insurance_Cancellation_date":"NA",
+    "Form": "91X",
+    "Type": "BIPD/Primary",
+    "Insurance Carrier": "NATIONAL TRANSPORTATION INSURANCE CO RRG, LLC",
+    "Policy/Surety": "MDX-25-288956-00",
+    "Posted Date": "2025-06-11",
+    "Coverage": {
+    "From": "$0",
+    "To": "$750,000"
+   },
+    "Effective Date": "2025-06-12",
+    "Cancellation Date": null,
+    "insurance_status":"N\/A",
+},
+    "safety_rating":"None",
+    "physical_address":"13531 CLAIRMONT WAY UNIT 177 OREGON CITY, OR \u00a0 97045",
+    "mailing_address":"PO BOX 9309 BROOKS, OR \u00a0 97305",
+    "phone":"(971) 529-8758",
+    "power_units":"1",
+    "drivers":"1",
+    "oos_percent_vehicle":"0%",
+    "oos_percent_driver":"0%",
+    "oos_percent_hazmat":"0%",
+    "crash_fatal":"0",
+    "crash_injury":"0",
+    "crash_tow":"0",
+    "crash_total":"0"
+  }
+]

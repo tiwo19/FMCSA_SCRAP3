@@ -1,0 +1,4 @@
+ # All dependencies (pip install -r)
+
+pip install playwright pandas
+playwright install

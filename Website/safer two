@@ -1,0 +1,874 @@
+<body>
+ <p>&nbsp;
+   <!-- WRAP THE WHOLE PAGE IN A CENTERED TABLE -->
+   <table border="0" cellpadding="0" cellspacing="0" width="100%" align="CENTER" summary="Table used for formatting purposes only">
+     <tbody><tr>
+       <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+     </tr>
+     <tr>
+       <th scope="ROW"><div class="hidden">SAFER Table Layout</div></th>
+       <td>
+         <div class="hidden">SAFER Layout</div><table border="0" cellpadding="0" cellspacing="0" width="100%" summary="For formatting purpose&gt;
+           &lt;TR&gt;&lt;TH SCOPE=" col"="">
+           <tbody><tr>
+           </tr><tr><td align="CENTER">
+               <table border="0" summary="Table used for formatting purposes only">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td align="left" valign="top">
+                     <form name="QueryBox" action="query.asp" method="Post">
+
+<!-- OnSubmit="format_input()" -->
+<input type="hidden" name="searchtype" value="ANY">
+<input type="hidden" name="query_type" value="queryCarrierSnapshot">
+<p align="CENTER">
+<table cellspacing="0" cellpadding="4" width="300" border="0" bgcolor="#c0e0ff" summary="query result">
+  <tbody><tr><th scope="COL"><div class="hidden">Query Result</div></th>
+  </tr>
+  <tr>
+    <!--following is for debugging code that keeps the user's last 
+        query parameter and string stored in the session so that 
+        from page to page the query form defaults to the user's
+        last query.-->
+    <!--td>LAST QUERY PARAM:MC_MX </TD-->
+    <!--td>LAST QUERY STRING:19866 </TD-->
+    <th scope="ROW"><div class="hidden">Information</div></th>
+    <td nowrap="nowrap"><input id="1" type="radio" name="query_param" value="USDOT">
+    <label for="1">USDOT Number</label></td>
+    <td nowrap="nowrap"><input id="2" type="radio" name="query_param" value="MC_MX" checked="">
+    <label for="2">MC/MX Number</label></td>
+    <td nowrap="nowrap"><input id="3" type="radio" name="query_param" value="NAME">
+    <label for="3">Name</label>
+    </td>
+  </tr>
+  <tr>
+    <th scope="ROW"><div class="hidden">SAFER Table Layout</div></th>
+    <td colspan="3" align="CENTER"><label for="4">Enter Value:</label>&nbsp;<input id="4" type=" text" name="query_string" value="19866">
+    </td>
+  </tr>
+  <tr>
+    <th scope="ROW"><div class="hidden">SAFER Table Layout</div></th>
+    <td colspan="3" align="CENTER"><input type="SUBMIT" value="Search">
+    </td>
+  </tr>
+</tbody></table>
+</p>
+</form>
+                   </td>
+                   <td>
+                     <p align="right">
+                        <font size="5" face="arial" color="#2040a0">
+                          <b><i>Company Snapshot</i></b><br>
+                        </font>
+                        <img src="Images/SAFER_hr_half.jpg" alt="horizonatal line" width="100%" height="2"><br>
+                        <img src="Images/spacer.gif" alt="" width="50%" height="2"><br>
+                        <font size="3" face="arial">
+                          <b>SOUTHERN CALI TRANSPORT LLC</b><br>
+                          USDOT Number: 2992747<br>
+                        </font>
+                     </p>
+                   </td></tr>
+                 <tr>
+                   <td colspan="2">
+                     <table align="right" bordercolor="SILVER" width="20%" border="1" bgcolor="#c0e0ff" cellpadding="2" cellspacing="0" summary="Other Information Options">
+                       <tbody><tr>
+                         <th scope="COL"><div class="hidden">Other Information Options for this carrier</div></th>
+                       </tr>
+                       <tr><td><table border="0" cellpadding="2" cellspacing="2" summary="Table used for formatting purposes only">
+                             <tbody><tr><th scope="COL"><div class="hidden">Carrier Information</div></th>
+                             </tr>
+                             <tr><td colspan="2" align="center">
+                                 <font size="2" face="arial"><b>Other Information for this Carrier<br></b></font>
+                                   <hr size="2" width="80%" color="#0033cc">
+                               </td></tr>
+                             <tr>
+                               <td align="right"><img src="Images/bullet_hp.gif" alt="" width="50%" height="10"></td>
+                               <td align="left"><font style="font-size:80%" face="arial"><a href="http://ai.fmcsa.dot.gov/sms/safer_xfr.aspx?DOT=2992747&amp;Form=SAFER" onmouseover="return true">SMS Results</a></font></td>
+                             </tr><tr>
+                               <td align="right"><img src="Images/bullet_hp.gif" alt="" width="50%" height="10"></td>
+                               <td align="left"><font style="font-size:80%" face="arial"><a href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno=2992747&amp;s_prefix=MC&amp;n_docketno=&amp;s_legalname=&amp;s_dbaname=&amp;s_state=">Licensing &amp; Insurance</a></font>
+                               <!-- <TD align=left><FONT style=font-size:80% face=arial>Licensing & Insurance (Currently Unavailable)</FONT>-->
+                               </td></tr></tbody></table>
+                     </td></tr></tbody></table>
+                     <h4><font size="3" face="arial"><b>
+                           <a name="ID">ID/Operations</a> |
+                           <a href="#Inspections">Inspections/Crashes In US</a> |
+                           <a href="#CaInspections">Inspections/Crashes In Canada</a> |
+                           <a href="#Safety">Safety Rating</a><br>
+                         </b></font></h4>
+                     <font size="2" face="arial">
+                       <b>Carriers:</b>  If you would like to update the following ID/Operations
+                       information, please complete and submit form
+                       <a href="http://li-public.fmcsa.dot.gov/LIVIEW/PKG_REGISTRATION.prc_option">MCS-150</a>
+                       <!--<A href="http://www.usdotnumberregistration.com">MCS-150</A>-->
+                       which can be obtained
+                       <!-- <A href="http://152.122.44.163/LIVIEW/pkg_registration.prc_option"> -->
+                       <a href="http://www.fmcsa.dot.gov/forms/print/r-l-forms.htm">online</a>
+                       or from your State FMCSA office.  If you would like to challenge the accuracy of your company's
+                       safety data, you can do so using FMCSA's <a href="http://dataqs.fmcsa.dot.gov">DataQs</a> system.
+                       <br><br>
+                       <!--<B>Carrier and other users:</B> FMCSA provides the Company Safety Profile (CSP) to motor carriers and
+                       the general public interested in obtaining greater detail on a
+                       particular motor carrier's safety performance then what is captured in
+                       the Company Snapshot.  To obtain a CSP please visit the <a href="https://ask.fmcsa.dot.gov/app/mcmiscatalog/c_chap4#csp">CSP order
+                       page</a> or call (800)832-5660 or (703)280-4001 (Fee Required).
+                       <br>-->
+<a name="USDOTSTATUS"></a> <b><font color="#004080">USDOT Status</font></b><br>
+<ul>
+  <li><b>ACTIVE</b>: The entity's US DOT number is active. </li>
+  <li><b>INACTIVE</b>: Inactive per 49 CFR 390.19(b)(4); biennial update of MCS-150 data not completed. </li>
+  <li><b>OUT-OF-SERVICE</b>: Carrier is under any type of out-of-service order and is not authorized to operate. </li>
+</ul>
+
+<a name="OOS"></a> <b><font color="#004080">Operating Authority Status</font></b><br>
+<ul>
+  <li><b>AUTHORIZED FOR { Passenger, Property, HHG }</b>: This will list the specific operating authorities the carrier (or broker) is allowed to operate. </li>
+  <li><b>NOT AUTHORIZED</b>: The entity does not have any operating authority and/or is not authorized to engage in interstate, for-hire operations.
+    <div style="padding-left:8.5%"> <span>
+ <span style="color:red;font-weight:bold">*Please Note:</span>
+   <span style="font-weight:bold">NOT AUTHORIZED</span> <span style="text-decoration: underline;">does not apply</span> to <span style="font-weight:bold">Private</span> or <span style="font-weight:bold">Intrastate</span> operations.
+ </span></div>
+  </li>
+  <li><b>OUT-OF-SERVICE</b>: Carrier is under any type of out-of-service order and is not authorized to operate. </li>
+</ul>
+<a name="OOSDate"></a> <b><font color="#004080">Out of Service Date</font></b><br>
+Indicates the date the company was ordered Out of Service. If there are multiple
+Out of Service orders, the earliest date will be displayed. <br>
+<br>
+<p><span style="color:red;font-weight:bold;">Please note:</span>If there are multiple Out-of-Service orders, the earliest date will be displayed.</p>
+			For help on the explanation of individual data fields, click on any
+                       field name or for help of a general nature go to
+                       <a href="saferhelp.aspx#General"><b>SAFER General Help</b></a>.<br>
+                       <br>
+                       <b>The information below reflects the content of the FMCSA management information systems as of <font color="#0000C0">
+                       07/06/2025. </font></b><font color="#0000C0"><br>
+                       
+                          <br>
+                          <b>To find out if this entity has a pending insurance cancellation, please <a href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?pv_vpath=LIVIEW&amp;n_dotno=2992747">click here</a>.</b>
+                          <br>
+                       
+                   </font></font></td></tr>
+   </tbody></table>
+ <p></p>
+ <center>
+   <table border="1" width="70%" bordercolor="SILVER" cellspacing="0" cellpadding="4" summary="For formatting purpose">
+     <tbody><tr><th scope="COL"><div class="hidden">SAFER Layout</div></th>
+     </tr>
+     <tr>
+       <!-- BEGIN: USDOT INFORMATION -->
+       <td colspan="4" class="querylabelbkg" style="text-align:center">USDOT INFORMATION</td>
+</tr>
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#EntityType">Entity Type:</a></th>
+       <td colspan="3" class="queryfield" valign="top">
+         CARRIER
+         &nbsp;</td>
+         <!--<TH SCOPE="ROW" class="querylabelbkg" align=right><A class="querylabel" href="saferhelp.aspx#Status">New Entrant Status:</A></TH>
+                   <TD class="queryfield" valign=top>
+                        (Active)
+                       
+                       &nbsp;</TD>-->
+     </tr>
+
+          <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#OOS">USDOT Status:</a></th>
+                           <td class="queryfield" valign="top">
+                        <!--ACTIVE-->  ACTIVE
+                       &nbsp;</td>
+               <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#OOSDate">Out of Service Date:</a></th>
+       <td width="30%" class="queryfield"> None </td>
+     </tr>
+
+          <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#USDOTID">USDOT Number:</a></th>
+       <td class="queryfield" valign="top">2992747&nbsp;</td>
+       <th class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#StateID">State Carrier ID Number:</a></th>
+       <td class="queryfield" valign="top">&nbsp;</td>
+     </tr>
+
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#">MCS-150 Form Date:</a></th>
+       <td class="queryfield" valign="top">06/18/2025&nbsp;</td>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#">MCS-150 Mileage (Year):</a></th>
+       <td valign="top"><font style="font-size:80%" face="arial" color="#0000C0"><b>56,000 (2024)&nbsp;</b></font></td>
+     </tr>
+
+
+
+     
+     <tr>
+       <!-- BEGIN: OPERATING AUTHORITY INFORMATION -->
+       <td colspan="4" class="querylabelbkg" style="text-align:center">OPERATING AUTHORITY INFORMATION</td>
+</tr>
+
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#OOS">Operating Authority Status:</a></th>
+       
+       <td colspan="4" width="30%" class="queryfield">
+	   <font color="#0000c0"><b>NOT AUTHORIZED</b> <br>
+	   <p>
+	    <span>
+ <span style="color:red;font-weight:bold">*Please Note:</span>
+   <span style="font-weight:bold;color:black;">NOT AUTHORIZED</span> <span style="color:black;text-decoration: underline;font-weight:normal">does not apply</span> <span style="font-weight:normal;color:black">to</span> <span style="color:black;font-weight:bold">Private</span>  <span style="font-weight:normal;color:black">or</span> <span style="color:black;font-weight:bold">Intrastate</span>  <span style="font-weight:normal;color:black">operations.</span>
+ </span></p>
+
+	   <b style="color:black">For Licensing and Insurance details </b> <a style="color:#0000c0" href="https://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno=2992747">click here.</a></font></td>
+       
+
+     </tr>
+          <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#ICCNumbers">MC/MX/FF Number(s):</a></th>
+       <td colspan="4" class="queryfield" valign="top">
+         
+         <a href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno=2992747&amp;s_prefix=MC&amp;n_docketno=19866&amp;s_legalname=&amp;s_dbaname=&amp;s_state="> MC-19866</a><br>
+         
+         &nbsp;</td>
+
+     </tr>
+
+<tr>
+       <!-- BEGIN: COMPANY INFORMATION -->
+       <td colspan="4" class="querylabelbkg" style="text-align:center">COMPANY INFORMATION
+        <!-- IST-600 add warning if reason changed = "Suspicious Activity Reported" -->
+        
+       </td>
+</tr>
+
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#Carrier">Legal Name:</a></th>
+       <td class="queryfield" valign="top" colspan="3">SOUTHERN CALI TRANSPORT LLC&nbsp;</td>
+     </tr>
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#DBAName">DBA Name:</a></th>
+       <td class="queryfield" valign="top" colspan="3">&nbsp;</td>
+     </tr>
+         
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#PhysicalAddress">Physical Address:</a></th>
+       <td class="queryfield" valign="top" colspan="3" id="physicaladdressvalue">
+        27563 ROSEMONT CT<br>
+            MORENO VALLEY, CA &nbsp; 92555
+         &nbsp;</td>
+     </tr>
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#Phone">Phone:</a></th>
+       <td class="queryfield" valign="top" colspan="3">
+       (909) 566-9626
+        &nbsp;</td>
+    </tr>
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#MailingAddress">Mailing Address:</a></th>
+       <td class="queryfield" valign="top" colspan="3" id="mailingaddressvalue">
+        27563 ROSEMONT CT<br>
+          MORENO VALLEY, CA &nbsp; 92555
+         &nbsp;</td>
+     </tr>
+
+     <tr>
+       <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#DUNSNumber">DUNS Number:</a></th>
+       <td colspan="4" class="queryfield" valign="top">--&nbsp;</td>
+     </tr>
+     <tr>
+      <th scope="ROW" class="querylabelbkg" align="right"><a class="querylabel" href="saferhelp.aspx#PowerUnits">Power Units:</a></th>
+      <td class="queryfield" valign="top">1&nbsp;</td>
+      <td colspan="2" style="padding: 0;">
+         <table border="0" width="100%" cellpadding="2" cellspacing="0">
+          <!-- IST-599 add non-cmv total -->
+          <tbody><tr><th scope="ROW" class="querylabelbkg" align="right" style="border-left: silver; border-right: silver; border-style: solid; border-top: none; border-bottom: none;"><a class="querylabel" href="saferhelp.aspx#NonCMV">Non-CMV Units:</a></th>
+          <td class="queryfield" valign="top" style="border-left: silver; border-right: silver; border-style: solid; border-top: none; border-bottom: none;">&nbsp;</td>
+          <th scope="ROW" class="querylabelbkg" align="right" style="border-left: silver; border-right: silver; border-style: solid; border-top: none; border-bottom: none;"><a class="querylabel" href="saferhelp.aspx#Drivers">Drivers:</a></th>
+          <td valign="top" style="border-left: silver; border-right: silver; border-style: solid; border-top: none; border-bottom: none;"><font style="font-size:80%" face="arial" color="#0000C0"><b>1&nbsp;</b></font></td>
+        </tr></tbody></table>
+        </td>
+     </tr>
+
+     <tr>
+       <!-- BEGIN: Operating Classification -->
+       <td colspan="4" class="querylabelbkg"><a class="querylabel" href="saferhelp.aspx#Class">Operation Classification:</a></td>
+     </tr>
+     <tr>
+       <td colspan="4" align="center">
+         <table border="0" cellpadding="2" cellspacing="0" summary="Operation Classification">
+           <tbody><tr><th scope="COL"><div class="hidden">Operation Classification</div></th>
+           </tr>
+           <tr>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td class="queryfield" width="5%">X</td>
+                   <td><font style="font-size:80%" face="arial">Auth. For Hire</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Exempt For Hire</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Private(Property)</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Priv. Pass. (Business)</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr><th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td class="queryfield" width="5%"></td>
+                   <td><font style="font-size:80%" face="arial">Priv. Pass.(Non-business)</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Migrant</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">U.S. Mail</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Fed. Gov't</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td class="queryfield" width="5%"></td>
+                   <td><font style="font-size:80%" face="arial">State Gov't</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Local Gov't</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Indian Nation</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td class="queryfield"></td>
+                 </tr>
+               </tbody></table>
+             </td>
+           </tr>
+         </tbody></table>
+       </td>
+     </tr>
+     <tr>
+       <!-- BEGIN: Carrier Operations -->
+       <td colspan="4" class="querylabelbkg" valign="top"><a class="querylabel" href="saferhelp.aspx#CarrierOP">Carrier Operation:</a></td>
+     </tr>
+     <tr>
+       <td colspan="4" align="center">
+         <table border="0" cellpadding="2" cellspacing="0" summary="Carrier Operation">
+           <tbody><tr><th scope="COL"><div class="hidden">Carrier Operation</div></th>
+           </tr>
+           <tr>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield">X</td>
+                   <td><font style="font-size:80%" face="arial">Interstate</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Intrastate Only (HM)</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr>
+                   <th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Intrastate Only (Non-HM)</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+           </tr>
+         </tbody></table>
+       </td>
+     </tr>
+     <tr>
+       <!-- BEGIN: Shipper Operations -->
+       
+     </tr><tr>
+       <!-- BEGIN: Cargo Carried -->
+       <td colspan="4" class="querylabelbkg" valign="top"><a class="querylabel" href="saferhelp.aspx#Cargo">Cargo Carried:</a></td>
+     </tr>
+     <tr>
+       <td colspan="4" align="center">
+         
+         <table border="0" cellpadding="2" cellspacing="0" summary="Cargo Carried">
+           <tbody><tr><th scope="COL"><div class="hidden">Cargo Carried</div></th>
+           </tr>
+           <tr>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr><th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield">X</td>
+                   <td><font style="font-size:80%" face="arial">General Freight</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Household Goods</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Metal: sheets, coils, rolls</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Motor Vehicles</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Drive/Tow away</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Logs, Poles, Beams, Lumber</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Building Materials</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Mobile Homes</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Machinery, Large Objects</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Fresh Produce</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr><th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Liquids/Gases</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Intermodal Cont.</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Passengers</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Oilfield Equipment</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Livestock</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Grain, Feed, Hay</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Coal/Coke</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Meat</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Garbage/Refuse</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">US Mail</font></td>
+                 </tr>
+               </tbody></table>
+             </td>
+             <td width="32%" valign="top">
+               <table border="0" cellpadding="2" cellspacing="0" summary="For formatting purpose">
+                 <tbody><tr><th scope="COL"><div class="hidden">SAFER Layout</div></th>
+                 </tr>
+                 <tr>
+                   <td width="5%" class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Chemicals</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Commodities Dry Bulk</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Refrigerated Food</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Beverages</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Paper Products</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Utilities</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Agricultural/Farm Supplies</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Construction</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td><font style="font-size:80%" face="arial">Water Well</font></td>
+                 </tr>
+                 <tr>
+                   <td class="queryfield"></td>
+                   <td class="queryfield"></td>
+                 </tr>
+               </tbody></table>
+             </td>
+           </tr>
+         </tbody></table>
+       </td>
+     </tr>
+   </tbody></table>
+ </center>
+ 
+ <br>
+ <br>
+ <center><img src="Images/SAFER_hr.jpg" alt="horizontal line" width="90%" height="2"></center>
+ <br>
+ <br>
+ <h4><font size="3" face="arial"><b>
+       <a href="#ID">ID/Operations</a> |
+       <a name="Inspections">Inspections/Crashes In US</a> |
+       <a href="#CAInspections">Inspections/Crashes In Canada</a> |
+       <a href="#Safety">Safety Rating</a><br>
+     </b></font></h4>
+ <font size="2" face="arial">
+   <b>US Inspection results for 24 months prior to: <font color="#0000C0">
+     07/06/2025</font></b><br>
+     <br>
+     Total Inspections: <font color="#0000C0">0</font><br>
+     Total IEP Inspections: <font color="#0000C0">0</font><br>
+     <b>Note:</b> Total inspections may be less than the sum of vehicle, driver, and
+     hazmat inspections. Go to <a href="saferhelp.aspx#Inspections">Inspections Help</a> for further
+     information.<br>
+ </font>
+ <br>
+ <!--  BEGIN: Inspection Data -->
+ <a class="querylabel" href="saferhelp.aspx#Inspections">Inspections:</a>
+ <center>
+   <table width="70%" border="1" bordercolor="silver" cellspacing="0" cellpadding="3" summary="Inspections">
+     <tbody><tr>
+       <th scope="COL" align="right" width="20%" class="querylabelbkg">Inspection Type</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Vehicle</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Driver</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Hazmat</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">IEP</th>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Inspections</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Out of Service</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Out of Service %</th>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+     </tr>
+     
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Nat'l Average %<br><span style="color: Red">as of DATE 06/06/2025*</span></th>
+       <td align="center"><font style="font-size:80%" face="arial">22.26%</font></td>
+       <td align="center"><font style="font-size:80%" face="arial">6.67%</font></td>
+       <td align="center"><font style="font-size:80%" face="arial">4.44%</font></td>
+       <td align="center"><font style="font-size:80%" face="arial">N/A</font></td>
+     </tr>
+     
+   </tbody></table>
+   <p style="color: Red; font-weight: bold; font-size: 80%; text-align: center">*OOS rates calculated based on the most recent 24 months of inspection data per the latest monthly SAFER Snapshot.</p>
+ </center>
+ <br>
+   <table width="50%" align="center">
+    <tbody><tr><td><font size="2" face="arial" align="left"><b>Inspections</b></font></td></tr>
+    <tr><td><font size="2" face="arial" align="left"><i>Number of roadside inspections conducted within the past two years. (Note: These inspections are distinct from the periodic inspections required under 49 CFR Part 396.17, and may not include inspection of all parts and accessories set forth in 49 CFR Part 396 Appendix A.)</i></font></td></tr>
+    <tr><td><font size="2" face="arial" align="left"><i>The inspections listed on SAFER are conducted in accordance with the North American Standard Inspection Program which was created by the Commercial Vehicle Safety Alliance (CVSA) as the roadside inspection process for inspecting commercial motor vehicles and drivers throughout North America.</i></font></td></tr>
+    <tr><td><font size="2" face="arial" align="left"><i>Inspections are listed as total, driver, vehicle, and Hazmat. Please see <a href="https://www.fmcsa.dot.gov/safety/question-1-can-violation-free-cvsa-level-i-or-level-v-inspection-be-used-satisfy-periodic">https://www.fmcsa.dot.gov/safety/question-1-can-violation-free-cvsa-level-i-or-level-v-inspection-be-used-satisfy-periodic</a> for more details.</i></font></td></tr>
+  </tbody></table>
+ <br>
+ <br>
+ <!--  BEGIN: Crash Data -->
+ <font size="2" face="arial">
+   <b>Crashes reported to FMCSA by states for 24 months prior to:
+   <font color="#0000C0">07/06/2025</font></b><br>
+   <br><b>Note:</b> Crashes listed represent a motor carrierâ€™s involvement in reportable crashes, without any determination as to responsibility.<br>
+ </font>
+ <br>
+ <a class="querylabel" href="saferhelp.aspx#Accidents">Crashes:</a>
+ <center>
+   <table width="70%" border="1" bordercolor="silver" cellspacing="0" cellpadding="3" summary="Crashes">
+     <tbody><tr>
+       <th scope="COL" align="right" width="20%" class="querylabelbkg">Type</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Fatal</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Injury</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Tow</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Total</th>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Crashes</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <!--
+       <TD align="center" class="queryfield"></TD>
+       -->
+     </tr>
+   </tbody></table>
+ </center>
+ <br>
+ <br>
+ <center><img src="Images/SAFER_hr.jpg" alt="horizontal line" width="90%" height="2"></center>
+ <br>
+ <br>
+ <h4><font size="3" face="arial"><b>
+       <a href="#ID">ID/Operations</a> |
+       <a href="#Inspections">Inspections/Crashes In US</a> |
+       <a name="CAInspections">Inspections/Crashes In Canada</a> |
+       <a href="#Safety">Safety Rating</a><br>
+     </b></font></h4>
+ <font size="2" face="arial">
+   <b>Canadian Inspection results for 24 months prior to: <font color="#0000C0">
+   07/06/2025</font></b><br>
+   <br>
+   Total inspections: <font color="#0000C0">0</font><br>
+   <b>Note:</b> Total inspections may be less than the sum of vehicle and driver inspections. Go to <a href="saferhelp.aspx#InspectionsCA">Inspections Help</a> for further
+   information.<br>
+ </font>
+ <br>
+ <!--  BEGIN: Inspection Data -->
+ <a class="querylabel" href="saferhelp.aspx#InspectionsCA">Inspections:</a>
+ <center>
+   <table width="70%" border="1" bordercolor="silver" cellspacing="0" cellpadding="3" summary="Inspections">
+     <tbody><tr>
+       <th scope="COL" align="right" width="20%" class="querylabelbkg">Inspection Type</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Vehicle</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Driver</th>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Inspections</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Out of Service</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Out of Service %</th>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+       <td align="center" class="queryfield">
+         0%
+       </td>
+     </tr>
+   </tbody></table>
+ </center>
+ <br>
+ <br>
+ <!--  BEGIN: Crash Data -->
+ <font size="2" face="arial">
+   <b>Crashes results for 24 months prior to:
+   <font color="#0000C0">07/06/2025</font></b><br>
+   <br><b>Note:</b> Crashes listed represent a motor carrierâ€™s involvement in reportable crashes, without any determination as to responsibility.<br>
+ </font>
+ <br>
+ <a class="querylabel" href="saferhelp.aspx#InspectionsCA">Crashes:</a>
+ <center>
+   <table width="70%" border="1" bordercolor="silver" cellspacing="0" cellpadding="3" summary="Crashes">
+     <tbody><tr>
+       <th scope="COL" align="right" width="20%" class="querylabelbkg">Type</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Fatal</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Injury</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Tow</th>
+       <th scope="COL" align="center" width="20%" class="querylabelbkg">Total</th>
+     </tr>
+     <tr>
+       <th scope="ROW" align="right" class="querylabelbkg">Crashes</th>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <td align="center" class="queryfield">0</td>
+       <!--
+       <TD align="center" class="queryfield"></TD>
+       -->
+     </tr>
+   </tbody></table>
+ </center>
+ <br>
+ <br>
+ <center><img src="Images/SAFER_hr.jpg" alt="horizontal line" width="80%" height="2"></center>
+ <br>
+ <br>
+ <h4><font size="3" face="arial"><b>
+       <a href="#ID">ID/Operations</a> |
+       <a href="#Inspections">Inspections/Crashes In US</a> |
+       <a href="#CAInspections">Inspections/Crashes In Canada</a> |
+       <a name="Safety">Safety Rating</a><br>
+     </b></font></h4>
+ <font size="2" face="arial">
+   <i>The Federal safety rating does not necessarily reflect the safety of the
+   carrier when operating in intrastate commerce.</i>
+ </font><br>
+ 
+ <br>
+ <font size="2" face="arial">
+   <a class="querylabel" href="saferhelp.aspx#SafetyRating">Carrier Safety Rating:</a><br>
+   <br>
+   <b>The rating below is current as of:
+   <font color="#0000C0">07/06/2025</font></b><br>
+   <br>
+   <b>Review Information:</b><br>
+ </font>
+ <br>
+ <center>
+   <table border="1" bordercolor="silver" width="70%" cellpadding="3" cellspacing="0" summary="Review Information">
+     <tbody><tr>
+       <th scope="COL"><div class="hidden">Review Information</div></th>
+     </tr>
+     <tr>
+       <th scope="ROW" width="20%" class="querylabelbkg">Rating Date:</th>
+       <td width="30%" class="queryfield">None </td>
+       <th scope="ROW" width="20%" class="querylabelbkg">Review Date:</th>
+       <td width="30%" class="queryfield">11/28/2017 </td>
+       </tr>
+     <tr>
+       <th scope="ROW" class="querylabelbkg">Rating:</th>
+       <td class="queryfield">None </td>
+       <th scope="ROW" class="querylabelbkg">Type:</th>
+       <td class="queryfield">Non-Ratable </td>
+     </tr>
+   </tbody></table>
+ 
+ <br>
+ <!-- BEGIN: End of display loop -->
+ 
+ <!-- BEGIN: End of display loop -->
+ 
+ <br>
+ </center></td>
+ <!-- THE ENTIRE PAGE IS WRAPPED IN A CENTERED TABLE
+      HERE ARE THE END TAGS FOR THE TABLE -->
+ </tr><tr>
+ <td align="center" style="font-size:80%">
+ 
+                 
+<table border="0" width="960" align="center" cellpadding="0" cellspacing="0" style="border: solid 0px #e8e8e8;">
+  <!-- footer-->
+<tbody><tr>
+    <td colspan="3">
+            &nbsp;
+     </td>
+</tr>
+<tr>
+     <td colspan="3" align="center">
+          <div id="footerbox">
+          <div id="nestedbox" style="background: url(images/logo_footer.gif) no-repeat scroll 20px 40% #FFFFFF;">
+         </div>
+	<p>
+   	<a href="" class="footer_link">SAFER Home</a> <span class="footer_white_text">|</span> 
+	
+   <a href="http://www.fmcsa.dot.gov/feedback.htm" class="footer_link">Feedback</a>
+   <span class="footer_white_text">|</span> 
+   <a href="http://www.fmcsa.dot.gov/Online-Privacy-Policy.aspx" class="footer_link">Privacy Policy</a> 
+   <span class="footer_white_text">|</span>
+   <a href="http://www.usa.gov/" class="footer_link">USA.gov</a> 
+   <span class="footer_white_text">|</span> 
+   <a href="http://www.fmcsa.dot.gov/foia/foia.htm" class="footer_link">Freedom of Information Act (FOIA)</a> 
+   <span class="footer_white_text">|</span> 
+   <a href="http://www.fmcsa.dot.gov/508disclaimer.htm" class="footer_link">Accessibility</a> 
+   <span class="footer_white_text">|</span>
+   <a href="http://www.oig.dot.gov/Hotline" class="footer_link">OIG Hotline</a> 
+   <span class="footer_white_text">|</span> 
+   <a href="http://www.fmcsa.dot.gov/about/WebPoliciesAndImportantLinks.htm" class="footer_link">Web Policies and Important Links</a> 
+   <span class="footer_white_text">|</span> 
+   <a href="http://www.fmcsa.dot.gov/plugins.htm" class="footer_link">Plug-ins </a>
+   <br>
+</p>
+<p>
+    <span class="footer_title_text">Federal Motor Carrier Safety Administration</span><br>
+    <span class="footer_white_text">1200 New Jersey Avenue SE, Washington, DC 20590 • 1-800-832-5660 • TTY: 1-800-877-8339 •</span>
+    <a href="http://www.fmcsa.dot.gov/about/contact/offices/displayfieldroster.asp" class="footer_link">Field Office Contacts</a>
+</p>
+	<p style="margin-bottom: 0em;">&nbsp;</p>
+	</div>
+     </td>
+</tr>
+</tbody></table>
+
+ </td></tr>
+ </tbody></table>
+
+
+<!-- END: Output Page Formatting -->
+</td></tr></tbody></table></p><div id="automa-palette"></div></body>
