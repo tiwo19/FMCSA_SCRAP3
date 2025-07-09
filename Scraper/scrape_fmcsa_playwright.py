@@ -1,11 +1,13 @@
+
 import asyncio
 import json
 import pandas as pd
 from playwright.async_api import async_playwright
 from datetime import datetime, timedelta
-from playwright.sync_api import sync_playwright
 from twocaptcha import TwoCaptcha
 import os
+import concurrent.futures
+import math
 
 os.environ['APIKEY_2CAPTCHA'] = "2f361c440d14c4c56ae93cb13ccc38d3"
 
@@ -77,7 +79,29 @@ def is_new_mc(decision_date, days=30):
 #Returns a list of date objects: [{display: ..., pd_date: ...}, ...].
 async def fetch_register_dates(page):
     await page.goto(REGISTER_URL)
-    await page.wait_for_selector('table')
+    # Set a realistic user-agent
+    await page.set_extra_http_headers({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    })
+    try:
+        await page.wait_for_selector('table', timeout=30000)
+    except Exception as e:
+        print(f"[DEBUG] Table not found after 30s: {e}")
+        # Save screenshot and HTML for debugging
+        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+        screenshot_path = f"register_debug_{ts}.png"
+        html_path = f"register_debug_{ts}.html"
+        await page.screenshot(path=screenshot_path)
+        html = await page.content()
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(html)
+        print(f"[DEBUG] Saved screenshot to {screenshot_path} and HTML to {html_path}")
+        # Check for CAPTCHA or interstitial
+        if 'captcha' in html.lower():
+            print("[DEBUG] CAPTCHA detected on register page. Manual intervention or 2Captcha needed.")
+        else:
+            print("[DEBUG] No table and no obvious CAPTCHA. Check HTML dump.")
+        return []
     rows = await page.query_selector_all('table tr')
     dates = []
     for row in rows:
@@ -398,7 +422,8 @@ async def fetch_safer_snapshot(page, mc_number):
                 await active_pending_btn.evaluate('form => form.submit()')
                 await page.wait_for_load_state('networkidle')
                 active_html = await page.content()
-                insurance_expiration = extract_insurance_expiration(active_html)
+                # insurance_expiration extraction removed (function not defined)
+                insurance_expiration = None
             except Exception as e:
                 print(f"[INSURANCE] Could not extract from Active/Pending Insurance: {e}")
         # If not found, try Insurance History
@@ -409,7 +434,8 @@ async def fetch_safer_snapshot(page, mc_number):
                     await history_btn.evaluate('form => form.submit()')
                     await page.wait_for_load_state('networkidle')
                     history_html = await page.content()
-                    insurance_expiration = extract_insurance_expiration(history_html)
+                    # insurance_expiration extraction removed (function not defined)
+                    insurance_expiration = None
                 except Exception as e:
                     print(f"[INSURANCE] Could not extract from Insurance History: {e}")
         if insurance_expiration:
@@ -531,82 +557,113 @@ def extract_active_insurance_details(html):
                         pass
     return result
 
-async def main():
+
+# --- Parallel Batch Processing ---
+def chunked(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+def flatten(entry):
+    flat = entry.copy()
+    ins = flat.pop('insurance', {})
+    # Insurance types
+    if 'insurance_types' in ins:
+        for t in ins['insurance_types']:
+            flat[f"insurance_{t['type'].lower()}_required"] = t['required']
+            flat[f"insurance_{t['type'].lower()}_on_file"] = t['on_file']
+    # Authority types
+    if 'authority_types' in ins:
+        for a in ins['authority_types']:
+            flat[f"authority_{a['authority_type'].lower()}_status"] = a['authority_status']
+    # Property types
+    if 'property_types' in ins and ins['property_types']:
+        for k, v in ins['property_types'][0].items():
+            flat[f"property_{k}"] = v
+    # Other insurance fields
+    for k in ["Form", "Type", "Insurance Carrier", "Policy/Surety", "Posted Date", "Coverage", "Effective Date", "Cancellation Date", "insurance_status"]:
+        if k in ins:
+            flat[f"insurance_{k.replace(' ', '_').replace('/', '_').lower()}"] = ins[k]
+    return flat
+
+async def process_mc_batch(mc_batch, base_entry_map):
+    results = []
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=False)
         page = await browser.new_page()
-        print("Fetching register dates...")
-        dates = await fetch_register_dates(page)
-        print(f"Found {len(dates)} dates.")
-        # Only process the first 1 date for testing/batching
-        dates = dates[:1]
-        all_entries = []
-        for date in dates:
-            print(f"Scraping details for {date['display']}...")
+        for mc_number in mc_batch:
+            entry = base_entry_map[mc_number].copy()
             try:
-                entries = await fetch_register_details(page, date['pd_date'])
-                print(f"[REGISTER] Sample entry for {date['display']}: {entries[0] if entries else 'No entries'}")
-                for entry in entries:
-                    entry['register_date'] = date['display']
-                    entry['is_new_mc'] = is_new_mc(entry['decision_date'])
-                    all_entries.append(entry)
-            except Exception as e:
-                print(f"Error scraping {date['display']}: {e}")
-        # Enrich with SAFER data (sequential for debug)
-        print("Enriching with SAFER snapshots...")
-        safer_page = await browser.new_page()
-        # Only process the first 2 MCs for SAFER enrichment (for testing)
-        sample_entries = all_entries[:2]
-        for i, entry in enumerate(sample_entries):
-            try:
-                print(f"[SAFER] Fetching for entry {i+1}/{len(sample_entries)}: {entry['mc_number']}")
-                safer_info = await fetch_safer_snapshot(safer_page, entry['mc_number'])
+                print(f"[PARALLEL SAFER] Fetching for MC: {mc_number}")
+                safer_info = await fetch_safer_snapshot(page, mc_number)
                 entry.update(safer_info)
             except Exception as e:
-                print(f"Error fetching SAFER for {entry['mc_number']}: {e}")
-        # For now, update all_entries with the enriched sample
-        for i, entry in enumerate(sample_entries):
-            all_entries[i].update(entry)
-        # Filter out carriers that are not ACTIVE in usdot_status
-        filtered_entries = [entry for entry in all_entries if entry.get('usdot_status', '').upper() == 'ACTIVE']
+                print(f"Error fetching SAFER for {mc_number}: {e}")
+            results.append(entry)
         await browser.close()
-        # Normalize and export
-        # --- FLATTEN insurance/authority/property fields for CSV ---
-        def flatten(entry):
-            flat = entry.copy()
-            ins = flat.pop('insurance', {})
-            # Insurance types
-            if 'insurance_types' in ins:
-                for t in ins['insurance_types']:
-                    flat[f"insurance_{t['type'].lower()}_required"] = t['required']
-                    flat[f"insurance_{t['type'].lower()}_on_file"] = t['on_file']
-            # Authority types
-            if 'authority_types' in ins:
-                for a in ins['authority_types']:
-                    flat[f"authority_{a['authority_type'].lower()}_status"] = a['authority_status']
-            # Property types
-            if 'property_types' in ins and ins['property_types']:
-                for k, v in ins['property_types'][0].items():
-                    flat[f"property_{k}"] = v
-            # Other insurance fields
-            for k in ["Form", "Type", "Insurance Carrier", "Policy/Surety", "Posted Date", "Coverage", "Effective Date", "Cancellation Date", "insurance_status"]:
-                if k in ins:
-                    flat[f"insurance_{k.replace(' ', '_').replace('/', '_').lower()}"] = ins[k]
-            return flat
+    return results
 
-        flat_entries = [flatten(e) for e in filtered_entries]
-        df = pd.DataFrame(flat_entries)
-        if not df.empty:
-            if 'register_date' in df.columns:
-                df['register_date'] = df['register_date'].apply(normalize_date)
-            if 'decision_date' in df.columns:
-                df['decision_date'] = df['decision_date'].apply(normalize_date)
-            df.to_csv(OUTPUT_CSV, index=False)
-            # Write flat JSON (not nested)
-            df.to_json(OUTPUT_JSON, orient='records', indent=2)
-            print(f"Exported {len(df)} records to {OUTPUT_CSV} and {OUTPUT_JSON}.")
-        else:
-            print("No records to export. DataFrame is empty.")
+def process_mc_batch_sync(mc_batch, base_entry_map):
+    # Wrapper for ProcessPoolExecutor (runs in a separate process)
+    import asyncio
+    return asyncio.run(process_mc_batch(mc_batch, base_entry_map))
+
+def main_parallel():
+    # Step 1: Scrape register dates and details (single process)
+    import asyncio
+    async def get_all_entries():
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=False)
+            page = await browser.new_page()
+            print("Fetching register dates...")
+            dates = await fetch_register_dates(page)
+            print(f"Found {len(dates)} dates.")
+            all_entries = []
+            for date in dates:
+                print(f"Scraping details for {date['display']}...")
+                try:
+                    entries = await fetch_register_details(page, date['pd_date'])
+                    print(f"[REGISTER] Sample entry for {date['display']}: {entries[0] if entries else 'No entries'}")
+                    for entry in entries:
+                        entry['register_date'] = date['display']
+                        entry['is_new_mc'] = is_new_mc(entry['decision_date'])
+                        all_entries.append(entry)
+                except Exception as e:
+                    print(f"Error scraping {date['display']}: {e}")
+            await browser.close()
+            return all_entries
+    all_entries = asyncio.run(get_all_entries())
+    # Only keep ACTIVE MCs for enrichment
+    base_entry_map = {e['mc_number']: e for e in all_entries}
+    mc_list = list(base_entry_map.keys())
+    print(f"Total MCs to enrich: {len(mc_list)}")
+    # Step 2: Parallel enrichment
+    batch_size = 20  # MCs per process
+    max_workers = 2  # For 2 CPU, 8GB RAM
+    batches = list(chunked(mc_list, batch_size))
+    print(f"Processing {len(batches)} batches with {max_workers} workers...")
+    results = []
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = [executor.submit(process_mc_batch_sync, batch, base_entry_map) for batch in batches]
+        for i, future in enumerate(concurrent.futures.as_completed(futures)):
+            batch_result = future.result()
+            print(f"Batch {i+1}/{len(batches)} done, {len(batch_result)} entries.")
+            results.extend(batch_result)
+    # Only keep ACTIVE carriers
+    filtered_entries = [entry for entry in results if entry.get('usdot_status', '').upper() == 'ACTIVE']
+    # Step 3: Normalize and export
+    flat_entries = [flatten(e) for e in filtered_entries]
+    df = pd.DataFrame(flat_entries)
+    if not df.empty:
+        if 'register_date' in df.columns:
+            df['register_date'] = df['register_date'].apply(normalize_date)
+        if 'decision_date' in df.columns:
+            df['decision_date'] = df['decision_date'].apply(normalize_date)
+        df.to_csv(OUTPUT_CSV, index=False)
+        df.to_json(OUTPUT_JSON, orient='records', indent=2)
+        print(f"Exported {len(df)} records to {OUTPUT_CSV} and {OUTPUT_JSON}.")
+    else:
+        print("No records to export. DataFrame is empty.")
+
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main_parallel()
