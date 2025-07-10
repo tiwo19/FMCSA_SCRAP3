@@ -977,7 +977,7 @@ def main_parallel():
     # Step 1: Scrape register dates and details (single process)
     async def get_all_entries():
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=False)
+            browser = await p.chromium.launch(headless=True)
             page = await browser.new_page()
             print("Fetching register dates...")
             dates = await fetch_register_dates(page)
