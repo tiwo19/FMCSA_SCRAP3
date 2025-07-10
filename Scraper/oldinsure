@@ -1,0 +1,177 @@
+
+import json
+import time
+import random
+from pathlib import Path
+from playwright.async_api import async_playwright
+from scrape_fmcsa_playwright import extract_active_insurance_details, solve_recaptcha_2captcha
+
+# Set your 2Captcha API key here or load from env
+TWO_CAPTCHA_API_KEY = "2f361c440d14c4c56ae93cb13ccc38d3"  # <-- Replace with your real key
+
+INPUT_JSON = "fmcsa_register_enriched.json"
+OUTPUT_JSON = "fmcsa_register_enriched.json"
+
+async def enrich_insurance_for_mc(mc_entry):
+    insurance_url = mc_entry.get("insurance_link")
+    mc_number = mc_entry.get("mc_number")
+    if not insurance_url or not mc_number:
+        return mc_entry
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=False)
+        page = await browser.new_page()
+        try:
+            await page.goto(insurance_url, timeout=120000)
+            await page.wait_for_load_state('networkidle', timeout=120000)
+            # Try to find MC or USDOT input (search form)
+            digits = ''.join(filter(str.isdigit, mc_number))
+            input_found = False
+            # Try MC input
+            try:
+                await page.wait_for_selector('input[name="n_docketno"]', timeout=5000)
+                await page.fill('input[name="n_docketno"]', digits)
+                # Set prefix to MC if dropdown exists
+                try:
+                    await page.select_option('select[name="s_prefix"]', 'MC')
+                except Exception:
+                    pass
+                input_found = True
+            except Exception:
+                pass
+            # Try USDOT input if MC not found
+            if not input_found:
+                try:
+                    await page.wait_for_selector('input[name="n_dotno"]', timeout=5000)
+                    await page.fill('input[name="n_dotno"]', digits)
+                    input_found = True
+                except Exception:
+                    pass
+            # If input found, solve CAPTCHA and submit
+            if input_found:
+                try:
+                    frame = await page.query_selector('iframe[src*="recaptcha"]')
+                    if frame:
+                        print(f"[ENRICH] CAPTCHA detected for {mc_number}, solving...")
+                        token = await solve_recaptcha_2captcha(page, TWO_CAPTCHA_API_KEY)
+                        if token:
+                            print(f"[ENRICH] CAPTCHA solved for {mc_number}")
+                        else:
+                            print(f"[ENRICH] CAPTCHA failed for {mc_number}")
+                    else:
+                        print(f"[ENRICH] No CAPTCHA detected for {mc_number}")
+                except Exception as e:
+                    print(f"[ENRICH] CAPTCHA solve error for {mc_number}: {e}")
+                # Submit the form
+                try:
+                    submit_btn = await page.query_selector('input[type="submit"]')
+                    if submit_btn:
+                        await submit_btn.click()
+                        await page.wait_for_load_state('networkidle', timeout=60000)
+                        await page.wait_for_timeout(2000)
+                    else:
+                        print(f"[ENRICH] Submit button not found for {mc_number}")
+                except Exception as e:
+                    print(f"[ENRICH] Submit failed for {mc_number}: {e}")
+            else:
+                print(f"[ENRICH] No MC or USDOT input found for {mc_number}, assuming already on results page.")
+            # Wait for results table or details page
+            await page.wait_for_timeout(2000)
+
+            # Step 1: If on search results, click the first "HTML" button (form with action pkg_carrquery.prc_getdetail)
+            try:
+                html_btn_form = await page.query_selector('form[action*="pkg_carrquery.prc_getdetail"]')
+                if html_btn_form:
+                    print(f"[ENRICH] Found HTML button for {mc_number}, clicking...")
+                    # Submit the form to go to details page
+                    await html_btn_form.evaluate('form => form.submit()')
+                    await page.wait_for_load_state('networkidle', timeout=30000)
+                    await page.wait_for_timeout(5000)  # Wait longer for details page to load
+                else:
+                    print(f"[ENRICH] No HTML button found for {mc_number}, may already be on details page.")
+            except Exception as e:
+                print(f"[ENRICH] Error clicking HTML button for {mc_number}: {e}")
+
+            # Step 2: On details page, look for Active/Pending Insurance button (form with action prc_activeinsurance)
+            try:
+                active_pending_form = await page.query_selector('form[action*="prc_activeinsurance"]')
+                if active_pending_form:
+                    print(f"[ENRICH] Found Active/Pending Insurance button for {mc_number}, clicking...")
+                    await active_pending_form.evaluate('form => form.submit()')
+                    await page.wait_for_load_state('networkidle', timeout=30000)
+                    await page.wait_for_timeout(5000)  # Wait longer for insurance page to load
+                else:
+                    print(f"[ENRICH] No Active/Pending Insurance button for {mc_number}, scraping current page.")
+            except Exception as e:
+                print(f"[ENRICH] Error clicking Active/Pending Insurance for {mc_number}: {e}")
+
+            # Step 3: Scrape insurance details from the final page
+            insurance_html = await page.content()
+            print(f"[ENRICH][DEBUG] HTML content length for {mc_number}: {len(insurance_html)}")
+            # Save HTML for manual inspection
+            debug_path = f"insurance_debug_{mc_number.replace('/', '_').replace(' ', '_')}.html"
+            with open(debug_path, "w", encoding="utf-8") as f:
+                f.write(insurance_html)
+            print(f"[ENRICH][DEBUG] Saved HTML for {mc_number} to {debug_path}")
+            insurance_data = extract_active_insurance_details(insurance_html)
+            print(f"[ENRICH][DEBUG] Extracted insurance data for {mc_number}: {insurance_data}")
+            mc_entry["insurance"] = insurance_data
+            print(f"[ENRICH] Insurance data updated for {mc_number}")
+
+            # Optional: Keep browser open for debugging
+            # await page.wait_for_timeout(8000)
+        except Exception as e:
+            print(f"[ENRICH] Failed for {mc_number}: {e}")
+        await browser.close()
+    return mc_entry
+
+def load_entries():
+    with open(INPUT_JSON, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+def save_entries(entries):
+    with open(OUTPUT_JSON, "w", encoding="utf-8") as f:
+        json.dump(entries, f, indent=2)
+
+def needs_enrichment(entry):
+    insurance = entry.get('insurance', {})
+    if not insurance or not isinstance(insurance, dict):
+        return True
+    if not insurance.get('insurance_status') or insurance.get('insurance_status') in ['N/A', '', None]:
+        return True
+    return False
+
+
+import asyncio
+
+async def main():
+    entries = load_entries()
+    updated = False
+    # Prepare tasks for MCs needing enrichment
+    tasks = []
+    indices = []
+    for i, entry in enumerate(entries):
+        if needs_enrichment(entry):
+            print(f"[ENRICH] Processing {entry.get('mc_number')}")
+            tasks.append(enrich_insurance_for_mc(entry))
+            indices.append(i)
+    if tasks:
+        # Run up to 10 in parallel
+        results = []
+        sem = asyncio.Semaphore(10)
+        async def sem_task(coro):
+            async with sem:
+                return await coro
+        results = await asyncio.gather(*(sem_task(task) for task in tasks))
+        for idx, enriched in zip(indices, results):
+            entries[idx] = enriched
+            updated = True
+            # Save after each enrichment to avoid data loss
+            save_entries(entries)
+    if updated:
+        print("[ENRICH] Insurance enrichment complete.")
+    else:
+        print("[ENRICH] No entries needed enrichment.")
+
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(main())

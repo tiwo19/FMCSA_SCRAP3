@@ -1,0 +1,15 @@
+[Unit]
+Description=FMCSA Insurance Enrichment Service
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/FMCSA_Scrapper/Scraper
+ExecStart=/home/ubuntu/FMCSA_Scrapper/env/bin/python3 /home/ubuntu/FMCSA_Scrapper/Scraper/enrich_insurance.py
+Restart=always
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

@@ -1,4 +1,16 @@
- # All dependencies (pip install -r)
 
 pip install playwright pandas
 playwright install
+playwright
+pandas
+numpy
+beautifulsoup4
+altair
+attrs
+blinker
+certifi
+charset_normalizer
+click
+colorama
+six
+typing_extensions

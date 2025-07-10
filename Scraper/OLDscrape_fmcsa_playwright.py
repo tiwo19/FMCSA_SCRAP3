@@ -1,0 +1,715 @@
+
+import asyncio
+import json
+import pandas as pd
+from playwright.async_api import async_playwright
+from datetime import datetime, timedelta
+from twocaptcha import TwoCaptcha
+import os
+import concurrent.futures
+import math
+
+
+
+async def solve_recaptcha_2captcha(page, api_key):
+    # Detect sitekey
+    frame = await page.query_selector('iframe[src*="recaptcha"]')
+    if not frame:
+        print("[2Captcha] No reCAPTCHA iframe found.")
+        return None
+    # Get sitekey from the iframe src
+    src = await frame.get_attribute('src')
+    import re
+    m = re.search(r'[?&]k=([\w-]+)', src)
+    if not m:
+        print("[2Captcha] No sitekey found in iframe src.")
+        return None
+    sitekey = m.group(1)
+    url = page.url
+    print(f"[2Captcha] Solving reCAPTCHA for sitekey: {sitekey} on {url}")
+    solver = TwoCaptcha(api_key)
+    import concurrent.futures
+    async def captchaSolver(sitekey, url):
+        loop = asyncio.get_running_loop()
+        with concurrent.futures.ThreadPoolExecutor() as pool:
+            result = await loop.run_in_executor(pool, lambda: solver.recaptcha(sitekey=sitekey, url=url))
+            return result
+    try:
+        result = await captchaSolver(sitekey, url)
+        token = result['code']
+        print("[2Captcha] Got token from 2Captcha.")
+        # Inject token into the page
+        await page.evaluate('''(token) => {
+            document.getElementById('g-recaptcha-response').style.display = '';
+            document.getElementById('g-recaptcha-response').value = token;
+            let el = document.getElementsByName('g_recaptcha_response');
+            if (el && el.length > 0) el[0].value = token;
+        }''', token)
+        await page.wait_for_timeout(2000)
+        return token
+    except Exception as e:
+        print(f"[2Captcha] Error solving reCAPTCHA: {e}")
+        return None
+
+REGISTER_URL = "https://li-public.fmcsa.dot.gov/LIVIEW/pkg_REGISTER.prc_reg_list"
+SAFER_URL_TEMPLATE = "https://safer.fmcsa.dot.gov/CompanySnapshot.aspx?mc_num={}"
+
+OUTPUT_CSV = "fmcsa_register_enriched.csv"
+OUTPUT_JSON = "fmcsa_register_enriched.json"
+
+# --- Utility Functions ---
+#Converts any date string to YYYY-MM-DD format for consistency.
+def normalize_date(date_str):
+    try:
+        return pd.to_datetime(date_str).strftime("%Y-%m-%d")
+    except Exception:
+        return date_str
+
+#'''Checks if the carrier’s decision date is within the last 30 days.
+#Returns True if “new”, else False.
+#Already handled in your pipeline by checking the decision date from the Register.
+#Used to flag new MC numbers for your dashboard/report.'''
+def is_new_mc(decision_date, days=30):
+    try:
+        date = pd.to_datetime(decision_date)
+        return (datetime.now() - date).days <= days
+    except Exception:
+        return False
+
+# --- Main Scraper Logic ---
+# Fetch register dates from the FMCSA page
+#Uses Playwright to open the FMCSA Register page.
+#Finds all date rows in the table.
+#Extracts the display date and the hidden pd_date value for each row.
+#Returns a list of date objects: [{display: ..., pd_date: ...}, ...].
+async def fetch_register_dates(page):
+    await page.goto(REGISTER_URL)
+    # Set a realistic user-agent
+    await page.set_extra_http_headers({
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    })
+    try:
+        await page.wait_for_selector('table', timeout=30000)
+    except Exception as e:
+        print(f"[DEBUG] Table not found after 30s: {e}")
+        # Save screenshot and HTML for debugging
+        ts = datetime.now().strftime('%Y%m%d_%H%M%S')
+        screenshot_path = f"register_debug_{ts}.png"
+        html_path = f"register_debug_{ts}.html"
+        await page.screenshot(path=screenshot_path)
+        html = await page.content()
+        with open(html_path, 'w', encoding='utf-8') as f:
+            f.write(html)
+        print(f"[DEBUG] Saved screenshot to {screenshot_path} and HTML to {html_path}")
+        # Check for CAPTCHA or interstitial
+        if 'captcha' in html.lower():
+            print("[DEBUG] CAPTCHA detected on register page. Manual intervention or 2Captcha needed.")
+        else:
+            print("[DEBUG] No table and no obvious CAPTCHA. Check HTML dump.")
+        return []
+    rows = await page.query_selector_all('table tr')
+    dates = []
+    for row in rows:
+        th = await row.query_selector('th')
+        if th:
+            date_text = (await th.inner_text()).strip()
+            pd_date_input = await row.query_selector('input[name="pd_date"]')
+            if pd_date_input:
+                pd_date = (await pd_date_input.get_attribute('value')).strip()
+                dates.append({'display': date_text, 'pd_date': pd_date})
+    return dates
+#----Navigates to the register page and submits the HTML Detail form for a specific date.----
+#Waits for the detail page to load.
+#Extracts the HTML content of the detail page.
+#Parses the HTML content into a pandas DataFrame.
+#Returns a list of DataFrames, one for each carrier.
+#Extracts carrier number, title, and decision date from each row.
+#Filters tables to only those with at least 3 columns and MC/FF numbers.
+async def fetch_register_details(page, pd_date):
+    # Submit the form for the given date
+    await page.goto(REGISTER_URL, timeout=60000)
+    try:
+        await page.wait_for_selector('form[action*="prc_reg_detail"]', timeout=60000)
+    except Exception as e:
+        print(f"[REGISTER] Timeout or error waiting for register detail form: {e}")
+        return []
+    forms = await page.query_selector_all('form[action*="prc_reg_detail"]')
+    found = False
+    for form in forms:
+        input_val = await form.query_selector('input[name="pd_date"]')
+        if input_val and (await input_val.get_attribute('value')).strip() == pd_date:
+            await form.evaluate('form => form.submit()')
+            try:
+                await page.wait_for_load_state('networkidle', timeout=60000)
+            except Exception as e:
+                print(f"[REGISTER] Timeout or error waiting for register detail page: {e}")
+                return []
+            found = True
+            break
+    if not found:
+        print(f"[REGISTER] No matching form found for pd_date {pd_date}")
+        return []
+    # Parse sections and entries
+    html = await page.content()
+    df_list = pd.read_html(html)
+    # Only keep tables with at least 3 columns and MC/FF numbers
+    carrier_tables = [df for df in df_list if df.shape[1] >= 3 and df.iloc[:,0].astype(str).str.contains(r'MC-|FF-', regex=True).any()]
+    entries = []
+    for table in carrier_tables:
+        for _, row in table.iterrows():
+            number = str(row.iloc[0]).strip()
+            title = str(row.iloc[1]).strip()
+            date = str(row.iloc[2]).strip()
+            # Extract company name and state from title (format: 'COMPANY NAME - CITY, STATE')
+            if '-' in title and ',' in title:
+                name_part, city_state = title.rsplit('-', 1)
+                company_name = name_part.strip()
+                city_state = city_state.strip()
+                if ',' in city_state:
+                    city, state = city_state.rsplit(',', 1)
+                    state = state.strip()
+                else:
+                    state = ''
+            else:
+                company_name = title.strip()
+                state = ''
+            # Filter for WA/OR only
+            if state in ['WA', 'OR']:
+                entries.append({
+                    'mc_number': number,
+                    'company_name': company_name,
+                    'state': state,
+                    'decision_date': date
+                })
+    return entries
+
+async def fetch_safer_snapshot(page, mc_number):
+    # Always reload the SAFER query page before each search
+    await page.goto("https://safer.fmcsa.dot.gov/CompanySnapshot.aspx")
+    await page.wait_for_selector('input[name="query_param"][value="MC_MX"]')
+    await page.check('input[name="query_param"][value="MC_MX"]')
+    digits = ''.join(filter(str.isdigit, mc_number))
+    await page.fill('input[name="query_string"]', digits)
+    await page.click('input[type="SUBMIT"]')
+    await page.wait_for_load_state('networkidle')
+    print(f"[SAFER] Queried MC/MX Number: {digits}")
+    html = await page.content()
+    print(f"[SAFER] First 500 chars of result HTML: {html[:500]}")
+
+    # Use BeautifulSoup for robust parsing
+    from bs4 import BeautifulSoup
+    soup = BeautifulSoup(html, 'html.parser')
+    safer_data = {}
+
+    # --- USDOT Status (Operating Status) ---
+    usdot_status = ''
+    usdot_status_label = soup.find('th', string=lambda s: s and 'USDOT Status' in s)
+    if usdot_status_label:
+        td = usdot_status_label.find_next('td')
+        if td:
+            usdot_status = td.get_text(strip=True)
+    safer_data['usdot_status'] = usdot_status
+
+    # --- Insurance Expiration (link only, not direct value) ---
+    # --- Insurance Expiration (link only, not direct value) ---
+    insurance_link = ''
+    # Find the correct insurance link: look for <a> whose href contains 'pkg_carrquery.prc_carrlist' and has n_dotno param
+    insurance_link = ''
+    for a in soup.find_all('a', href=True):
+        href = a['href']
+        if 'pkg_carrquery.prc_carrlist' in href and 'n_dotno=' in href:
+            insurance_link = href
+            # Ensure absolute URL
+            if not insurance_link.startswith('http'):
+                insurance_link = 'https://li-public.fmcsa.dot.gov' + insurance_link if insurance_link.startswith('/') else 'https://li-public.fmcsa.dot.gov/LIVIEW/' + insurance_link
+            break
+    # Fallback: look for <a> whose parent contains the phrase
+    if not insurance_link:
+        for a in soup.find_all('a', href=True):
+            parent = a.find_parent()
+            if parent and 'For Licensing and Insurance details' in parent.get_text():
+                insurance_link = a['href']
+                if not insurance_link.startswith('http'):
+                    insurance_link = 'https://li-public.fmcsa.dot.gov' + insurance_link if insurance_link.startswith('/') else 'https://li-public.fmcsa.dot.gov/LIVIEW/' + insurance_link
+                break
+    # Fallback: original method (for rare cases)
+    if not insurance_link:
+        insurance_a = soup.find('a', string=lambda s: s and 'For Licensing and Insurance details' in s)
+        if insurance_a:
+            insurance_link = insurance_a.get('href', '')
+            if not insurance_link.startswith('http'):
+                insurance_link = 'https://li-public.fmcsa.dot.gov' + insurance_link if insurance_link.startswith('/') else 'https://li-public.fmcsa.dot.gov/LIVIEW/' + insurance_link
+    safer_data['insurance_link'] = insurance_link if insurance_link else ''
+
+    # --- Insurance workflow navigation logic ---
+    # If insurance_link is present, follow the workflow:
+    # 1. Go to insurance_link (pkg_carrquery.prc_carrlist)
+    # 2. If a form is present, fill MC/US DOT and submit (handle recaptcha if possible)
+    # 3. On results table, click the HTML button in View Details
+    # 4. On details page (pkg_carrquery.prc_getdetail), extract insurance info
+    # 5. Only use Active/Pending Insurance section, ignore Insurance History
+    insurance_data = {}
+    if insurance_link:
+        await page.goto(insurance_link)
+        await page.wait_for_load_state('networkidle')
+        await page.wait_for_timeout(2000)
+        try:
+            recaptcha_div = await page.query_selector('.g-recaptcha')
+            if recaptcha_div:
+                api_key = os.environ.get('APIKEY_2CAPTCHA')
+                if not api_key:
+                    print('[2Captcha] API key not set. Set APIKEY_2CAPTCHA environment variable.')
+                else:
+                    await solve_recaptcha_2captcha(page, api_key)
+            submit_btn = await page.query_selector('input[type="submit"],button[type="submit"]')
+            if submit_btn:
+                await submit_btn.click()
+                await page.wait_for_load_state('networkidle')
+                await page.wait_for_timeout(2000)
+        except Exception as e:
+            print(f"[INSURANCE] Form submit/recaptcha failed: {e}")
+        try:
+            await page.wait_for_selector('form[action*="prc_getdetail"] input[type="submit"]', timeout=10000)
+            html_buttons = await page.query_selector_all('form[action*="prc_getdetail"] input[type="submit"]')
+            if html_buttons:
+                await html_buttons[0].click()
+                await page.wait_for_load_state('networkidle')
+                await page.wait_for_timeout(2000)
+        except Exception as e:
+            print(f"[INSURANCE] Could not click HTML details button: {e}")
+        # On details page, extract ALL insurance info (including tables)
+        insurance_html = await page.content()
+        insurance_data = extract_insurance_info(insurance_html)
+        # Also extract all insurance/authority/property tables from the details page
+        insurance_details = extract_active_insurance_details(insurance_html)
+        insurance_data.update(insurance_details)
+        # Try Active/Pending Insurance section only for policy details
+        try:
+            active_pending_btn = await page.query_selector('form[action*="prc_activeinsurance"]')
+            if active_pending_btn:
+                await active_pending_btn.evaluate('form => form.submit()')
+                await page.wait_for_load_state('networkidle')
+                await page.wait_for_timeout(2000)
+                active_html = await page.content()
+                policy_details = extract_active_insurance_details(active_html)
+                insurance_data.update(policy_details)
+        except Exception as e:
+            print(f"[INSURANCE] Could not extract from Active/Pending Insurance: {e}")
+    # Place insurance data under 'insurance' key in output
+    safer_data['insurance'] = insurance_data
+    # Remove top-level insurance_status and insurance_expiration if present (now only in insurance object)
+    if 'insurance_status' in safer_data:
+        del safer_data['insurance_status']
+    if 'insurance_expiration' in safer_data:
+        del safer_data['insurance_expiration']
+    # Always include insurance_status and insurance_expiration fields, default to 'N/A' if not found
+    if 'insurance_status' not in safer_data:
+        safer_data['insurance_status'] = 'N/A'
+    if 'insurance_expiration' not in safer_data:
+        safer_data['insurance_expiration'] = 'N/A'
+    # Log if insurance info is missing
+    if not insurance_link:
+        print(f"[SAFER] No insurance link found for MC: {mc_number}")
+    if safer_data['insurance_status'] == 'N/A' or safer_data['insurance_expiration'] == 'N/A':
+        print(f"[SAFER] Insurance info missing for MC: {mc_number}")
+
+    # --- Safety Rating ---
+    safety_rating = ''
+    rating_table = None
+    for table in soup.find_all('table'):
+        if table.find('th', string=lambda s: s and 'Review Information' in s):
+            rating_table = table
+            break
+    if rating_table:
+        for tr in rating_table.find_all('tr'):
+            ths = tr.find_all('th')
+            tds = tr.find_all('td')
+            if ths and tds:
+                if 'Rating:' in ths[0].get_text():
+                    safety_rating = tds[0].get_text(strip=True)
+    safer_data['safety_rating'] = safety_rating
+
+    # --- Contact Info ---
+    def get_field(label):
+        th = soup.find('th', string=lambda s: s and label in s)
+        if th:
+            td = th.find_next('td')
+            if td:
+                return td.get_text(separator=' ', strip=True)
+        return ''
+    safer_data['physical_address'] = get_field('Physical Address')
+    safer_data['mailing_address'] = get_field('Mailing Address')
+    safer_data['phone'] = get_field('Phone')
+
+    # --- Fleet Size ---
+    safer_data['power_units'] = get_field('Power Units')
+    safer_data['drivers'] = get_field('Drivers')
+
+    # --- Out-of-Service Percentages ---
+    # Find the Inspections table (look for header row with 'Inspection Type')
+    oos_percentages = {'vehicle': '', 'driver': '', 'hazmat': ''}
+    inspections_table = None
+    for table in soup.find_all('table'):
+        header = table.find('th', string=lambda s: s and 'Inspection Type' in s)
+        if header:
+            inspections_table = table
+            break
+    if inspections_table:
+        rows = inspections_table.find_all('tr')
+        for row in rows:
+            th = row.find('th')
+            if th and 'Out of Service %' in th.get_text():
+                tds = row.find_all('td')
+                if len(tds) >= 3:
+                    oos_percentages['vehicle'] = tds[0].get_text(strip=True)
+                    oos_percentages['driver'] = tds[1].get_text(strip=True)
+                    oos_percentages['hazmat'] = tds[2].get_text(strip=True)
+    safer_data['oos_percent_vehicle'] = oos_percentages['vehicle']
+    safer_data['oos_percent_driver'] = oos_percentages['driver']
+    safer_data['oos_percent_hazmat'] = oos_percentages['hazmat']
+
+    # --- Crash Data ---
+    # Find the Crashes table (look for header row with 'Type', 'Fatal', 'Injury', 'Tow', 'Total')
+    crash_data = {'fatal': '', 'injury': '', 'tow': '', 'total': ''}
+    crash_table = None
+    for table in soup.find_all('table'):
+        header = table.find('th', string=lambda s: s and 'Type' in s)
+        if header and table.find('th', string=lambda s: s and 'Fatal' in s):
+            crash_table = table
+            break
+    if crash_table:
+        for row in crash_table.find_all('tr'):
+            th = row.find('th')
+            if th and 'Crashes' in th.get_text():
+                tds = row.find_all('td')
+                if len(tds) >= 4:
+                    crash_data['fatal'] = tds[0].get_text(strip=True)
+                    crash_data['injury'] = tds[1].get_text(strip=True)
+                    crash_data['tow'] = tds[2].get_text(strip=True)
+                    crash_data['total'] = tds[3].get_text(strip=True)
+    safer_data['crash_fatal'] = crash_data['fatal']
+    safer_data['crash_injury'] = crash_data['injury']
+    safer_data['crash_tow'] = crash_data['tow']
+    safer_data['crash_total'] = crash_data['total']
+
+    # --- Insurance Details Extraction ---
+    # If insurance_link is present, follow and extract insurance info
+    insurance_data = {}
+    insurance_expiration = None
+    if insurance_link:
+        # Open the insurance link in the same page (absolute if needed)
+        if insurance_link.startswith("/"):
+            insurance_url = f"https://li-public.fmcsa.dot.gov{insurance_link}"
+        elif insurance_link.startswith("http"):
+            insurance_url = insurance_link
+        else:
+            insurance_url = f"https://li-public.fmcsa.dot.gov/LIVIEW/{insurance_link}"
+        await page.goto(insurance_url)
+        await page.wait_for_load_state('networkidle')
+        # If a search form is present, fill and submit it
+        try:
+            usdot_input = await page.query_selector('input[name="pv_usdot"]')
+            if usdot_input:
+                await usdot_input.fill(digits)
+                submit_btn = await page.query_selector('input[type="submit"]')
+                if submit_btn:
+                    await submit_btn.click()
+                    await page.wait_for_load_state('networkidle')
+        except Exception as e:
+            print(f"[INSURANCE] Form fill/submit failed: {e}")
+        # Now on the details page, extract insurance info
+        insurance_html = await page.content()
+        insurance_data = extract_insurance_info(insurance_html)
+        # Try to follow and extract from Active/Pending Insurance first
+        active_pending_btn = await page.query_selector('form[action*="prc_activeinsurance"]')
+        if active_pending_btn:
+            try:
+                await active_pending_btn.evaluate('form => form.submit()')
+                await page.wait_for_load_state('networkidle')
+                active_html = await page.content()
+                # insurance_expiration extraction removed (function not defined)
+                insurance_expiration = None
+            except Exception as e:
+                print(f"[INSURANCE] Could not extract from Active/Pending Insurance: {e}")
+        # If not found, try Insurance History
+        if not insurance_expiration:
+            history_btn = await page.query_selector('form[action*="prc_insurancehistory"]')
+            if history_btn:
+                try:
+                    await history_btn.evaluate('form => form.submit()')
+                    await page.wait_for_load_state('networkidle')
+                    history_html = await page.content()
+                    # insurance_expiration extraction removed (function not defined)
+                    insurance_expiration = None
+                except Exception as e:
+                    print(f"[INSURANCE] Could not extract from Insurance History: {e}")
+        if insurance_expiration:
+            insurance_data['insurance_expiration'] = insurance_expiration
+    safer_data.update(insurance_data)
+    return safer_data
+
+# --- Insurance Extraction Helper ---
+from bs4 import BeautifulSoup
+def extract_insurance_info(html):
+    soup = BeautifulSoup(html, "html.parser")
+    result = {}
+    # US DOT, Docket, Legal Name
+    details_table = soup.find("table", summary=lambda s: s and "formating purposes only" in s)
+    if details_table:
+        rows = details_table.find_all("tr")
+        for row in rows:
+            ths = row.find_all("th")
+            tds = row.find_all("td")
+            if ths and tds:
+                if "US DOT" in ths[0].text:
+                    result["usdot"] = tds[0].text.strip()
+                if "Docket Number" in ths[-1].text:
+                    result["docket_number"] = tds[-1].text.strip()
+            if ths and "Legal Name" in ths[0].text:
+                result["legal_name"] = row.find("td").text.strip()
+    # Remove legacy authority, insurance, and BOC-3/Blanket Company extraction (handled in new logic)
+    pass
+    return result
+
+
+# --- Active Insurance Extraction Helper ---
+def extract_active_insurance_details(html):
+    soup = BeautifulSoup(html, "html.parser")
+    result = {}
+    # --- Insurance Type Table ---
+    insurance_types = []
+    for table in soup.find_all('table'):
+        headers = [th.get_text(strip=True).lower() for th in table.find_all('th')]
+        if 'insurance type' in headers and 'insurance required' in headers and 'insurance on file' in headers:
+            for row in table.find_all('tr')[1:]:
+                cells = row.find_all(['th', 'td'])
+                if len(cells) == 3:
+                    typ = cells[0].get_text(strip=True)
+                    required = cells[1].get_text(strip=True)
+                    on_file = cells[2].get_text(strip=True)
+                    insurance_types.append({
+                        'type': typ,
+                        'required': required,
+                        'on_file': on_file
+                    })
+            break
+    if insurance_types:
+        result['insurance_types'] = insurance_types
+
+    # --- Authority Type Table ---
+    authority_types = []
+    for table in soup.find_all('table'):
+        headers = [th.get_text(strip=True).lower() for th in table.find_all('th')]
+        if 'authority type' in headers and 'authority status' in headers and 'application pending' in headers:
+            for row in table.find_all('tr')[1:]:
+                cells = row.find_all(['th', 'td'])
+                if len(cells) == 3:
+                    authority_types.append({
+                        'authority_type': cells[0].get_text(strip=True),
+                        'authority_status': cells[1].get_text(strip=True),
+                        'application_pending': cells[2].get_text(strip=True)
+                    })
+            break
+    if authority_types:
+        result['authority_types'] = authority_types
+
+    # --- Property/Passenger/Household Goods/Private/Enterprise Table ---
+    property_types = []
+    for table in soup.find_all('table'):
+        headers = [th.get_text(strip=True).lower() for th in table.find_all('th')]
+        if 'property' in headers and 'passenger' in headers and 'household goods' in headers and 'private' in headers and 'enterprise' in headers:
+            for row in table.find_all('tr')[1:]:
+                cells = row.find_all(['td', 'th'])
+                if len(cells) == 5:
+                    property_types.append({
+                        'property': cells[0].get_text(strip=True),
+                        'passenger': cells[1].get_text(strip=True),
+                        'household_goods': cells[2].get_text(strip=True),
+                        'private': cells[3].get_text(strip=True),
+                        'enterprise': cells[4].get_text(strip=True)
+                    })
+            break
+    if property_types:
+        result['property_types'] = property_types
+    # Extract Form, Type, Carrier, Policy, Posted Date, Coverage, Effective Date, Cancellation Date
+    # Look for a table with these headers
+    for table in soup.find_all('table'):
+        headers = [th.get_text(strip=True).lower() for th in table.find_all('th')]
+        if 'form' in headers and 'type' in headers and 'insurance carrier' in headers:
+            for row in table.find_all('tr')[1:]:
+                cells = row.find_all(['td', 'th'])
+                if len(cells) >= 9:
+                    result['Form'] = cells[0].get_text(strip=True)
+                    result['Type'] = cells[1].get_text(strip=True)
+                    result['Insurance Carrier'] = cells[2].get_text(strip=True)
+                    result['Policy/Surety'] = cells[3].get_text(strip=True)
+                    result['Posted Date'] = cells[4].get_text(strip=True)
+                    result['Coverage'] = {'From': cells[5].get_text(strip=True), 'To': cells[6].get_text(strip=True)}
+                    result['Effective Date'] = cells[7].get_text(strip=True)
+                    result['Cancellation Date'] = cells[8].get_text(strip=True) if cells[8].get_text(strip=True) else None
+                    # Insurance status logic
+                    if result['Cancellation Date']:
+                        result['insurance_status'] = 'Lapsed'
+                    else:
+                        result['insurance_status'] = 'Active'
+                    # Flag for renewal if Effective Date > 1 year ago
+                    from datetime import datetime
+                    try:
+                        eff_date = datetime.strptime(result['Effective Date'], '%Y-%m-%d')
+                        if (datetime.now() - eff_date).days > 365:
+                            result['flag_renewal'] = True
+                    except Exception:
+                        pass
+    return result
+
+
+# --- Parallel Batch Processing ---
+def chunked(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+def flatten(entry):
+    flat = entry.copy()
+    ins = flat.pop('insurance', {})
+    # Insurance types
+    if 'insurance_types' in ins:
+        for t in ins['insurance_types']:
+            flat[f"insurance_{t['type'].lower()}_required"] = t['required']
+            flat[f"insurance_{t['type'].lower()}_on_file"] = t['on_file']
+    # Authority types
+    if 'authority_types' in ins:
+        for a in ins['authority_types']:
+            flat[f"authority_{a['authority_type'].lower()}_status"] = a['authority_status']
+    # Property types
+    if 'property_types' in ins and ins['property_types']:
+        for k, v in ins['property_types'][0].items():
+            flat[f"property_{k}"] = v
+    # Other insurance fields
+    for k in ["Form", "Type", "Insurance Carrier", "Policy/Surety", "Posted Date", "Coverage", "Effective Date", "Cancellation Date", "insurance_status"]:
+        if k in ins:
+            flat[f"insurance_{k.replace(' ', '_').replace('/', '_').lower()}"] = ins[k]
+    return flat
+
+async def process_mc_batch(mc_batch, base_entry_map):
+    async with async_playwright() as p:
+        browser = await p.chromium.launch(headless=True)
+        
+        async def process_one(mc_number):
+            entry = base_entry_map[mc_number].copy()
+            page = await browser.new_page()
+            max_retries = 3
+            safer_info = {}
+            for attempt in range(1, max_retries + 1):
+                try:
+                    print(f"[PARALLEL SAFER] Fetching for MC: {mc_number} (Attempt {attempt})")
+                    safer_info = await fetch_safer_snapshot(page, mc_number)
+                    entry.update(safer_info)
+                    # Guarantee insurance_link is always present in entry
+                    entry['insurance_link'] = safer_info.get('insurance_link', '')
+                    print(f"[DEBUG] MC {mc_number} insurance_link: {entry['insurance_link']}")
+                    break
+                except Exception as e:
+                    print(f"Error fetching SAFER for {mc_number} (Attempt {attempt}): {e}")
+                    if attempt < max_retries:
+                        await asyncio.sleep(3 * attempt)  # Exponential backoff
+                    else:
+                        print(f"[ERROR] Giving up on MC: {mc_number} after {max_retries} attempts.")
+            await page.close()
+            return entry
+        tasks = [process_one(mc_number) for mc_number in mc_batch]
+        results = await asyncio.gather(*tasks)
+        await browser.close()
+    return results
+
+def process_mc_batch_sync(mc_batch, base_entry_map):
+    # Wrapper for ProcessPoolExecutor (runs in a separate process)
+    import asyncio
+    return asyncio.run(process_mc_batch(mc_batch, base_entry_map))
+
+def main_parallel():
+    import asyncio
+    import os
+    import json
+    from collections import defaultdict
+    # Configurable batch size and workers (reduced for stability)
+    batch_size = int(os.environ.get('BATCH_SIZE', 100))
+    max_workers = int(os.environ.get('MAX_WORKERS', 12))
+    progress_file = 'fmcsa_progress.jsonl'
+    # Step 1: Scrape register dates and details (single process)
+    async def get_all_entries():
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            page = await browser.new_page()
+            print("Fetching register dates...")
+            dates = await fetch_register_dates(page)
+            print(f"Found {len(dates)} dates.")
+            all_entries = []
+            for date in dates:
+                print(f"Scraping details for {date['display']}...")
+                try:
+                    entries = await fetch_register_details(page, date['pd_date'])
+                    print(f"[REGISTER] Sample entry for {date['display']}: {entries[0] if entries else 'No entries'}")
+                    for entry in entries:
+                        entry['register_date'] = date['display']
+                        entry['is_new_mc'] = is_new_mc(entry['decision_date'])
+                        all_entries.append(entry)
+                except Exception as e:
+                    print(f"Error scraping {date['display']}: {e}")
+            await browser.close()
+            return all_entries
+    all_entries = asyncio.run(get_all_entries())
+    # Only keep ACTIVE MCs for enrichment
+    base_entry_map = {e['mc_number']: e for e in all_entries}
+    mc_list = list(base_entry_map.keys())
+    print(f"Total MCs to enrich: {len(mc_list)}")
+    # --- Progress/Resume logic ---
+    processed_mcs = set()
+    batch_results = []
+    if os.path.exists(progress_file):
+        print(f"Resuming from progress file: {progress_file}")
+        with open(progress_file, 'r', encoding='utf-8') as pf:
+            for line in pf:
+                try:
+                    entry = json.loads(line)
+                    processed_mcs.add(entry['mc_number'])
+                    batch_results.append(entry)
+                except Exception:
+                    continue
+    mc_list_to_process = [mc for mc in mc_list if mc not in processed_mcs]
+    print(f"MCs left to process: {len(mc_list_to_process)}")
+    batches = list(chunked(mc_list_to_process, batch_size))
+    print(f"Processing {len(batches)} batches with {max_workers} workers...")
+    # Step 2: Parallel enrichment with incremental output
+    import threading
+    progress_lock = threading.Lock()
+    def write_progress(entries):
+        with progress_lock:
+            with open(progress_file, 'a', encoding='utf-8') as pf:
+                for entry in entries:
+                    pf.write(json.dumps(entry) + '\n')
+    with concurrent.futures.ProcessPoolExecutor(max_workers=max_workers) as executor:
+        futures = {executor.submit(process_mc_batch_sync, batch, base_entry_map): idx for idx, batch in enumerate(batches)}
+        for future in concurrent.futures.as_completed(futures):
+            batch_result = future.result()
+            print(f"Batch {futures[future]+1}/{len(batches)} done, {len(batch_result)} entries.")
+            write_progress(batch_result)
+            batch_results.extend(batch_result)
+    # Only keep ACTIVE carriers
+    filtered_entries = [entry for entry in batch_results if entry.get('usdot_status', '').upper() == 'ACTIVE']
+    # Step 3: Normalize and export
+    flat_entries = [flatten(e) for e in filtered_entries]
+    df = pd.DataFrame(flat_entries)
+    if not df.empty:
+        if 'register_date' in df.columns:
+            df['register_date'] = df['register_date'].apply(normalize_date)
+        if 'decision_date' in df.columns:
+            df['decision_date'] = df['decision_date'].apply(normalize_date)
+        df.to_csv(OUTPUT_CSV, index=False)
+        df.to_json(OUTPUT_JSON, orient='records', indent=2)
+        print(f"Exported {len(df)} records to {OUTPUT_CSV} and {OUTPUT_JSON}.")
+    else:
+        print("No records to export. DataFrame is empty.")
+
+
+if __name__ == "__main__":
+    main_parallel()

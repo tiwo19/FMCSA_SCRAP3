@@ -1,0 +1,1290 @@
+<body class="modal">
+    <!--[if lt IE 8]>
+        <p class="browserAlert"><div class="message">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</div></p>
+    <![endif]-->
+    <div id="loginTimeout" class="browserAlert" data-session-check="/SMS/Home/CheckLogin.aspx">
+        <div class="message">
+            For your protection, your login session will expire in <span class="ttl">0:00</span>,
+            do you wish <a class="extendSession" href="/SMS/Home/RefreshLogin.aspx">extend your session</a>
+            or <a class="logout" href="/SMS/Home/Logout.aspx?ReturnURL=%2FSMS%2FCarrier%2F1010335%2FOverview.aspx">logout</a>?
+        </div>
+    </div>
+    <p id="skip-link">
+        <a href="#content-start" class="element-invisible element-focusable">Jump to content</a>
+    </p>
+    <div id="page-bg-container">
+    </div>
+    <div id="page-wrapper">
+        <div id="dot-header">
+            <div class="mode-ribbon container">
+                <a href="http://www.dot.gov">
+                    <img src="/SMS/Images/Layout/dot_ribbon_logo.png" alt="d o t logo"><span class="dottext">
+                        United States Department of Transportation
+                    </span>
+                </a>
+                <ul class="mode-ribbon-links">
+                    <li>
+                        <a href="http://www.dot.gov/about">About DOT</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/our-activities">Our Activities</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/areas-of-focus">Areas of Focus</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div id="page" class="container">
+            <header>
+                <div id="fmcsa-header">
+                    <a href="http://www.fmcsa.dot.gov">
+                        <img src="/SMS/Images/Layout/fmcsa_logo.png" alt="FMCSA - Federal Motor Carrier Safety Adminstration">
+                    </a>
+                    <div id="ai-login-pnl" class="public">
+                            <a href="/Login/Default.aspx?ReturnURL=/SMS/Carrier/1010335/Overview.aspx?FirstView=True">
+                                Login
+                            </a>
+                    </div>
+                    <form accept-charset="UTF-8" action="//search.usa.gov/search" id="search_form" target="_blank" method="get" class="usa-search">
+                        <input id="affiliate" name="affiliate" type="hidden" value="dot-fmcsa">
+                        <label for="query">
+                            Enter Search Term(s):
+                        </label>
+                        <input autocomplete="off" class="usagov-search-autocomplete ui-autocomplete-input" id="query" name="query" type="text" title="Enter Search Term(s):">
+                        <input name="commit" type="submit" value="Search">
+                    </form>
+                </div>
+                <div id="csa-header">
+                    <h1>
+                        <a href="https://csa.fmcsa.dot.gov">
+                            <img src="/SMS/Images/Layout/csa_logo.png" alt="CSA - Compliance, Safety, Accountability">
+                        </a>
+                    </h1>
+                    <h2>
+                        Working Together for Safety.
+                    </h2>
+                    <hr>
+                </div>
+                <div id="sms-header">
+                    <h1>
+                        <a href="/SMS/">
+                            <img src="/SMS/Images/Layout/sms_logo.png" alt="SMS - Safety Measurement System">
+                            <img src="/SMS/Images/Layout/sms_logo_bw.png" alt="SMS - Safety Measurement System" class="bw">
+                        </a>
+                    </h1>
+                    <a class="mobileMenu" href="#menu">
+                        <img src="/SMS/Images/responsive/menu_white.png">
+                    </a>
+                    <nav>
+                        
+<ul id="topMenu">
+    <li>
+        <a href="/">A&amp;I</a>
+    </li>
+    <li>
+        <a target="_blank" href="https://csa.fmcsa.dot.gov">CSA</a>
+    </li>
+    <li>
+        <a href="/SMS/">
+            SMS
+        </a>
+    </li>
+            <li>
+                <a class="selected" href="/SMS/Carrier/1010335/Overview.aspx">Overview</a>
+            </li>
+  
+    <li>
+        <a class="" href="/SMS/Tools/Index.aspx">Tools</a>
+        <ul>
+            <li><a href="/SMS/Tools/Downloads.aspx">Downloads</a></li>
+            <li><a href="/SMS/Tools/Reports.aspx">Reports</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="/SMS/HelpCenter/Index.aspx" target="_blank">
+            Help
+        </a>
+    </li>
+        <li>
+            <a href="/SMS/Search/Index.aspx">
+                Search
+            </a>
+        </li>
+    <li id="nav-login-pnl">
+            <a href="/Login/Default.aspx?ReturnURL=/SMS/Carrier/1010335/Overview.aspx?FirstView=True">
+                Login
+            </a>
+    </li>
+</ul>
+                        
+<form action="/SMS/Search/Index.aspx" method="post">        <label id="QuckSearch" style="">QUICK SEARCH</label>
+        <label for="MCSearch" class="element-invisible">
+            
+            Enter Carrier Name or U.S. DOT#
+        </label>
+        <input name="MCSearch" type="text" list="dots" placeholder="Enter Carrier Name or U.S. DOT#" class="ui-autocomplete-input" autocomplete="off">
+        <input id="btnGo" onclick="$('#btnSearch').click();" type="button" value="GO">
+        <input id="btnSearch" type="submit" name="search" value="Search" class="element-invisible">
+        <datalist id="dots">
+        </datalist>
+        <aside class="search-disclaimer"><h5> 
+    Use of SMS Data/Information</h5> 
+<h6>FAST Act of 2015:</h6>
+<p>Readers should not draw conclusions about a carrier's overall safety condition simply based on the data displayed in this system. Unless a motor carrier has received an UNSATISFACTORY safety rating under part 385 of title 49, Code of Federal Regulations, or has otherwise been ordered to discontinue operations by the Federal Motor Carrier Safety Administration, it is authorized to operate on the Nation's roadways.</p>
+<h6>Safety Measurement System:</h6>
+<p> 
+    The data in the Safety Measurement System (SMS) is performance data used by the 
+    Agency and Enforcement Community. A 
+    <img src="/SMS/Images/Icons/prioritize_small.png" alt="Carrier may be prioritized for an intervention action and roadside inspection." class="prioritizeIcon"> 
+    symbol, based on that data, indicates that FMCSA may prioritize a motor carrier 
+    for further monitoring. 
+</p> 
+<p> 
+    The 
+    <img src="/SMS/Images/Icons/prioritize_small.png" alt="Carrier may be prioritized for an intervention action and roadside inspection." class="prioritizeIcon"> 
+    symbol is not intended to imply any federal safety rating of the carrier pursuant 
+    to 49 USC 31144. Readers should not draw conclusions about a carrier's overall safety 
+    condition simply based on the data displayed in this system. Unless a motor carrier 
+    in the SMS has received an UNSATISFACTORY safety rating pursuant to 49 CFR Part 
+    385, or has otherwise been ordered to discontinue operations by the FMCSA, it is 
+    authorized to operate on the nation's roadways. 
+</p> 
+<p> 
+    Motor carrier safety ratings are available at <a href="http://safer.fmcsa.dot.gov" target="_blank">http://safer.fmcsa.dot.gov</a> and motor carrier licensing and 
+    insurance status are available at <a href="http://li-public.fmcsa.dot.gov" target="_blank"> 
+        http://li-public.fmcsa.dot.gov/</a>. 
+</p>
+
+<script type="text/javascript">function ga(){}</script></aside>
+</form>
+                    </nav>
+                </div>
+            </header>
+            <a id="content-start" class="element-invisible"></a>
+            
+
+
+
+
+
+<article id="carrierBody" class="carrier-data">
+    
+
+<section id="CarrierInfo">
+
+            <aside id="preview-message">
+        <div class="preview-image">
+            
+        </div>
+        <div class="preview-message-text">
+            <h2>Learn About the CSA Prioritization Preview</h2>
+<p>FMCSA is proposing a new prioritization methodology to keep enforcement efforts focused on the carriers in most need of intervention. Learn more about these changes and how they will improve highway safety.</p>
+<script type="text/javascript">
+function ga(){}
+</script>
+            <a class="preview-link" href="https://csa.fmcsa.dot.gov/PrioritizationPreview" target="_blank">Visit the CSA Prioritization Preview</a>
+        </div>
+    </aside>
+
+    <div id="basicInfo">
+
+        <div class="carrierName">
+            <h3>S G M TRUCKING &amp; EXCAVATING</h3>
+            <ul class="no-list">
+                <li id="dot-num-li">
+                    <label>
+                        U.S. DOT#:
+                    </label>
+                    1010335
+                </li>
+            </ul>
+        </div>
+        <ul class="no-list">
+                <li>
+                    <label>
+                        Address:
+                    </label>
+
+                    6 DARBY BROOK LN
+                    <br>
+                    ALSTEAD, NH 03602
+                </li>
+            <li>
+                <label>
+                    Number of Vehicles:
+                </label>
+                3
+            </li>
+            <li>
+                <label>
+                    Number of Drivers:
+                </label>
+                1
+            </li>
+            <li>
+                <label>
+                    Number of Inspections:
+                </label>
+                0
+            </li>
+        </ul>
+    </div>
+
+    <div id="SafetyRating">
+        <h3>Safety Rating &amp; OOS Rates</h3>
+            <p class="data-source">
+                (As of 07/08/2025 updated
+                daily from <a target="_blank" href="http://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&amp;query_type=queryCarrierSnapshot&amp;query_param=USDOT&amp;query_string=1010335#Inspections">
+                    SAFER
+                </a>)
+            </p>
+            <div id="Rating">Not Rated</div>
+            <h4>Out of Service Rates</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>OOS %</th>
+                        <th>National Avg %</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>Vehicle</th>
+                        <td></td>
+                        <td>23.1</td>
+                    </tr>
+                    <tr>
+                        <th>Driver</th>
+                        <td></td>
+                        <td>6.1</td>
+                    </tr>
+                    <tr>
+                        <th>Hazmat</th>
+                        <td></td>
+                        <td>3.0</td>
+                    </tr>
+                </tbody>
+            </table>
+    </div>
+    <div id="LicensingAndInsurance">
+        <h3>Licensing and Insurance</h3>
+            <p class="data-source">
+                (As of 07/08/2025 updated
+                hourly from <a target="_blank" href="http://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist?n_dotno=1010335">
+                    L&amp;I
+                </a>)
+            </p>
+            <table>
+                <caption>
+                    Active For-Hire Authority
+                </caption>
+                <thead>
+                    <tr class="subHead">
+                        <th>Type </th>
+                        <th>Yes/No </th>
+                        <th>MC#/MX# </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr>
+                            <th>
+                                Property
+                            </th>
+                                <td>Yes </td>
+                                <td>
+                                    MC-13732
+                                </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Passenger
+                            </th>
+                                <td>No </td>
+                                <td></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Household Goods
+                            </th>
+                                <td>No </td>
+                                <td></td>
+                        </tr>
+                        <tr>
+                            <th>
+                                Broker
+                            </th>
+                                <td>No </td>
+                                <td></td>
+                        </tr>
+                </tbody>
+            </table>
+    </div>
+    <div class="clear">
+    </div>
+</section>
+
+
+
+
+    <div id="BASICContainer">
+    
+
+<aside id="basic-toolbox-container">
+    <ul id="basic-toolbox">
+        <li class="profile">
+            <a href="/SMS/Carrier/1010335/CompleteProfile.aspx"><span>SEE YOUR DATA</span></a>
+        </li>
+        <li class="contact">
+            <a href="https://csa.fmcsa.dot.gov/CSA_Feedback.aspx" target="_blank">
+                CONTACT US
+            </a>
+        </li>
+            <li class="downloads">             
+                <a href="#Downloads" class="modalContentLink" data-width="330" data-height="210">DOWNLOADS</a>                
+            </li>
+        <li class="print">
+            <a href="/SMS/Carrier/1010335/CompleteProfile.aspx?print=true" target="_blank">
+                PRINT
+            </a>
+        </li>
+    </ul>
+</aside>
+
+
+    <section id="BASICs">
+            <aside id="preview-link">
+                <a href="https://csa.fmcsa.dot.gov/PrioritizationPreview" target="_blank">View CSA Prioritization Preview</a>
+            </aside>
+        <aside id="BASICStatusIG">
+            <a href="/SMS/Home/SMSToCrash.aspx" target="_blank">How does SMS relate to crashes?</a>
+        </aside>
+        <h2>
+            BASIC Status <span class="display-type">
+                (Public Property Carrier View)
+                
+                <a class="measureDetail" href="#">
+                    <img src="/SMS/Images/Icons/q.png" alt="FAST Act of 2015" title="Pursuant to the Fast Act of 2015, the
+property carrier safety data available to 
+the public includes inspection and crash 
+data, investigation results, and measures
+for all public BASICs. Property carriers can
+log in to view their own complete SMS
+results. All safety data on passenger
+carriers remains available to the public.">
+                </a>
+            </span>
+        </h2>
+        <p class="basicSubtitle">
+            <span class="basicName">Behavior Analysis &amp; Safety Improvement Categories (BASICs)</span>
+            <span class="basicDates">
+                Based on a 24-month record ending June 6, 2025
+            </span>
+        </p>
+        <ul id="BASICList" class="public">
+                <li class=" UnsafeDriving">
+                    <a href="/SMS/Carrier/1010335/BASIC/UnsafeDriving.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/UnsafeDriving.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/UnsafeDrivingBW.png" alt="">
+                                                <span class="basicName">Unsafe Driving</span>
+                    </a>
+                </li>
+                <li class=" CrashIndicator">
+                    <a href="/SMS/Carrier/1010335/BASIC/CrashIndicator.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/CrashIndicator.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/CrashIndicatorBW.png" alt="">
+                        <span class="notPublic">Not Public</span>                        <span class="basicName">Crash Indicator</span>
+                    </a>
+                </li>
+                <li class=" HOSCompliance">
+                    <a href="/SMS/Carrier/1010335/BASIC/HOSCompliance.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/HOSCompliance.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/HOSComplianceBW.png" alt="">
+                                                <span class="basicName">Hours-of-Service Compliance</span>
+                    </a>
+                </li>
+                <li class=" VehicleMaint">
+                    <a href="/SMS/Carrier/1010335/BASIC/VehicleMaint.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/VehicleMaint.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/VehicleMaintBW.png" alt="">
+                                                <span class="basicName">Vehicle Maintenance</span>
+                    </a>
+                </li>
+                <li class=" DrugsAlcohol">
+                    <a href="/SMS/Carrier/1010335/BASIC/DrugsAlcohol.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/DrugsAlcohol.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/DrugsAlcoholBW.png" alt="">
+                                                <span class="basicName">Controlled Substances and Alcohol</span>
+                    </a>
+                </li>
+                <li class=" HMCompliance">
+                    <a href="/SMS/Carrier/1010335/BASIC/HMCompliance.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/HMCompliance.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/HMComplianceBW.png" alt="">
+                        <span class="notPublic">Not Public</span>                        <span class="basicName">Hazardous Materials Compliance</span>
+                    </a>
+                </li>
+                <li class=" DriverFitness">
+                    <a href="/SMS/Carrier/1010335/BASIC/DriverFitness.aspx">
+                        <img class="basicIcon" src="/SMS/images/Icons/BASICs/DriverFitness.png" alt="">
+                        <img class="basicIcon bw" src="/SMS/images/Icons/BASICs/DriverFitnessBW.png" alt="">
+                                                <span class="basicName">Driver Fitness</span>
+                    </a>
+                </li>
+        </ul>
+            <p style="margin-left: 10px; margin-bottom: 0;">
+                Select a BASIC icon above to get details, or view your <a href="/SMS/Carrier/1010335/CompleteProfile.aspx">Complete SMS Profile</a>.
+            </p>
+    </section>
+</div>
+
+    <div id="CarrierDetail">
+    <div id="CarrierDetailCol1" class="CarrierDetailCol">
+        <section id="SummaryOfActivities">
+            <h3>Summary of Activities</h3>
+            <p>
+                The summary includes information on the 5 most recent investigations and 24 months
+                of inspections and crash history.
+            </p>
+            <ul>
+                <li>
+                    <label>
+                        Most Recent Investigation:
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        Total Inspections:
+                    </label>
+                    0
+                    <ul>
+                        <li>
+                            <label>
+                                Total Inspections without Violations used in SMS:
+                            </label>
+                            0
+                        </li>
+                        <li>
+                            <label>
+                                Total Inspections with Violations used in SMS:
+                            </label>
+                            0
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <label>
+                        Total Crashes<a href="#crashFn" id="crashFnLnk" class="footnoteLnk">*</a>
+                    </label>
+                    : 0
+                </li>
+            </ul>
+            <p class="footnote">
+                <a href="#crashFnLnk" id="crashFn" class="footnoteLnk">*</a>Crashes listed represent a motor carrier’s involvement in <a href="/SMS/HelpCenter/Index.aspx#faq1203">reportable crashes</a>, regardless of the carrier’s or driver’s role in the crash. <a href="/SMS/HelpCenter/Index.aspx#faq1204">Continue for details</a>.
+            </p>
+            <a class="boxLink double modalContentLink" data-height="400" href="#CarrierActivities">
+                Continue for more Crash, Inspection &amp; Investigation Details
+            </a>
+        </section>
+    </div>
+    <div id="CarrierDetailCol2" class="CarrierDetailCol">
+        <section id="CarrierRegistration">
+            <h3>Carrier Registration</h3>
+                <section class="carrier-flags">
+                    <h3>Flags</h3>
+                    <ul>
+                    </ul>
+                </section>
+            <a class="boxLink modalLink" href="/SMS/Carrier/1010335/CarrierRegistration.aspx">Carrier Registration Details</a> <a class="boxLink modalLink print" data-has-tabs="true" href="/SMS/Carrier/1010335/Threshold.aspx">Subject to General Threshold</a>
+                    <a class="boxLink" target="_blank" href="http://www.fmcsa.dot.gov/registration/updating-your-registration">
+                        Update Registration Info
+                    </a>
+        </section>
+    </div>
+        <div id="CarrierDetailCol3" class="CarrierDetailCol">
+            <section id="PenaltiesHistory">
+                <h3>Enforcement Cases</h3>
+                    <p class="data-source">
+                        (Six years as of 07/08/2025
+                        updated monthly from 
+                        <a target="_blank" href="https://ai.fmcsa.dot.gov/SafetyProgram/spRptEnforcement.aspx?rpt=CLOSE&amp;carrier=1010335">
+                        
+                            FMCSA
+                        </a>) 
+                    </p>
+                        <p>
+                            No penalties found
+                        </p>
+            </section>
+            <section id="ToolResources">
+                <h3>Tools/Resources</h3>
+                <a class="boxLink" target="_blank" href="https://csa.fmcsa.dot.gov/Documents/SMSMethodology.pdf">SMS Methodology</a>
+                <a class="boxLink" target="_blank" href="/SMS/HelpCenter/Index.aspx#Improve">
+                    How to Improve
+                </a><a class="boxLink" target="_blank" href="https://dataqs.fmcsa.dot.gov">
+                    Request a Data Review
+                </a>
+                <h5>
+                    For U.S. DOT# 1010335
+                </h5>
+                <a class="boxLink" href="/SMS/Carrier/1010335/CompleteProfile.aspx">Complete SMS Profile</a>
+
+                <a class="boxLink" href="/SMS/Carrier/1010335/History.aspx">Carrier History</a>
+
+                    <a class="boxLink modalContentLink" data-width="330" data-height="210" href="#Downloads">
+                        Downloads
+                    </a>
+            </section>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+    <div class="modal-content">
+        <aside id="CarrierActivities">
+            <h2>
+                Summary of Activities <span class="asOf">
+                    (as of 6/6/2025,
+                    updated monthly)
+                </span>
+            </h2>
+            <div class="modalBody">
+                <p>
+                    The summary includes information on the 5 most recent investigations and 24 months
+                    of inspections and crash history.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="inter">
+                                Most Recent Investigation:
+None                            </th>
+                            <th class="insp">
+                                Total Inspections: 0
+                                <span class="subItem">Total inspections without violations used in SMS: 0</span>
+                                <span class="subItem">Total inspections with violations used in SMS: 0</span>
+                            </th>
+                            <th class="crash">
+                                Total Crashes: 0<a href="#crashPopFn" id="crashPopFnLnk">*</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="inter">
+                                <ul>
+                                </ul>
+                            </td>
+                            <td class="insp">
+                                <span class="ev header">
+                                    <label>
+                                    </label>
+                                    <span class="num"># Insp.</span> <span class="oos">OOS</span>
+                                </span><span class="ev">
+                                    <label>
+                                        Driver Inspections
+                                    </label>
+                                    <span class="num">0</span>
+                                    <span class="oos">0.0%</span>
+                                </span><span class="ev">
+                                    <label>
+                                        Vehicle Inspections
+                                    </label>
+                                    <span class="num">0</span>
+                                    <span class="oos">0.0%</span>
+                                </span><span class="ev subItem">
+                                    <label>
+                                        Placardable HM Inspections
+                                    </label>
+                                    <span class="num">0</span>
+                                    <span class="oos">0.0%</span>
+                                </span><span class="ev subItem">
+                                    <label>
+                                        % Placardable HM Inspections
+                                    </label>
+                                    <span class="num">0.0%</span>
+                                    <span class="oos">&nbsp;</span>
+                                </span>
+                            </td>
+                            <td class="crash">
+                                <span class="ev">
+                                    <label>
+                                        Fatal Crashes
+                                    </label>
+                                    <span class="num">0</span>
+                                </span><span class="ev">
+                                    <label>
+                                        Injury Crashes
+                                    </label>
+                                    <span class="num">0</span>
+                                </span><span class="ev">
+                                    <label>
+                                        Towaway Crashes
+                                    </label>
+                                    <span class="num">0</span>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p class="footnote">
+                    <a href="#crashPopFnLnk" id="crashPopFn">*</a>Crashes listed represent a motor carrier’s involvement in <a href="/SMS/HelpCenter/Index.aspx#faq1203">reportable crashes</a>, regardless of the carrier’s or driver’s role in the crash. <a href="/SMS/HelpCenter/Index.aspx#faq1204">Continue for details</a>.
+                </p>
+            </div>
+        </aside>
+        
+            <aside id="Downloads">
+                <h2>Downloads</h2>
+                <div class="modalBody">
+                    <p>
+                        Select a focus and file type to download SMS data.
+                    </p>
+<form action="/SMS/Carrier/1010335/Download.aspx" method="get">                        <ul>
+                            <li>
+                                <label>
+                                    Focus:
+                                </label>
+                                <select name="BASIC">
+                                    <option value="0">All</option>
+                                        <option value="11">Unsafe Driving</option>
+                                        <option value="17">Crash Indicator</option>
+                                        <option value="12">HOS Compliance</option>
+                                        <option value="15">Vehicle Maint.</option>
+                                        <option value="14">Drugs/Alcohol</option>
+                                        <option value="16">HM Compliance</option>
+                                        <option value="13">Driver Fitness</option>
+                                                                    </select>
+                            </li>
+                            <li>
+                                <label>
+                                    File Type:
+                                </label>
+                                <select name="FileType">
+                                    <option value="XLSX">Excel</option>
+                                    <option value="XML">XML</option>
+                                </select>
+                            </li>
+                            <li class="submit">
+                                <input type="submit" value="Download">
+                            </li>
+                        </ul>
+</form>                </div>
+            </aside>
+                    <aside id="AdjAveragePU">
+                <h2>
+                    Average PU × Utilization Factor <span class="asOf">
+                        (as of 6/6/2025,
+                        updated monthly)
+                    </span>
+                </h2>
+                <div class="modalBody">
+                    <p>The SMS normalizes the Unsafe Driving and Crash Indicator BASICs measure by carrier size (i.e., a hybrid power unit and vehicle miles travelled measure) to account for exposure. Carrier size is defined as average power units multiplied by the utilization factor.</p>
+                    <div class="avdAvgCalc">
+                        <span class="comp total">
+                            <span class="val">2.5</span>
+                            <label>
+                                Average PU × Utilization Factor
+                            </label>
+                        </span><span class="sign">=</span> <span class="comp avgPU">
+                            <span class="val">1.7</span>
+                            <label>
+                                Average Power Units
+                            </label>
+                        </span><span class="sign">×</span> <span class="comp UF">
+                            <span class="val">1.497</span>
+                            <label>
+                                Utilization Factor
+                            </label>
+                        </span>
+                    </div>
+                    <ul class="tabs">
+                        <li class="selected"><a href="#avgPU" data-select="True">Average Power Units</a></li>
+                        <li><a href="#uf">Utilization Factor</a></li>
+                    </ul>
+                    <div id="avgPU" class="tabBody" style="display: block;">
+                        <p>In order to account for changes in a carrier's fleet size during the previous 24 months an average power unit value is used in the calculation to determine a carrier's Unsafe Driving BASIC and Crash Indicator measures.</p>
+                        <div class="avgPUFormula">
+                            <span class="comp total">
+                                <span class="val">1.7</span>
+                                <label>
+                                    Average Power Units
+                                </label>
+                            </span><span class="sign">=</span> <span class="frac">
+                                <span class="n">
+                                    <span class="comp pu">
+                                        <span class="val">3</span>
+                                        <label>
+                                            Current Power Units
+                                        </label>
+                                    </span><span class="sign">+</span> <span class="comp pu">
+                                        <span class="val">1</span>
+                                        <label>
+                                            Power Units 6 Months Ago
+                                        </label>
+                                    </span><span class="sign">+</span> <span class="comp pu">
+                                        <span class="val">1</span>
+                                        <label>
+                                            Power Units 18 Months Ago
+                                        </label>
+                                    </span>
+                                </span>
+                                <br>
+                                <span class="d val">3</span>
+                            </span>
+                        </div>
+                    </div>
+                    <div id="uf" class="tabBody" style="display: none;">
+                        <p>The Utilization Factor is a multiplier that adjusted the average PU values based on the utilization in terms of VMT per average PU.</p>
+                        <ol>
+                            <li>
+                                <label>
+                                    Determine Carrier Segment:
+                                </label>
+                                    <span class="seg">
+                                        <strong>Straight</strong><br>
+                                        Straight trucks/other vehicles constituting more than 30% of the total PU<br>
+                                        U.S. DOT# 1010335 = 66%
+                                        Straight trucks/other vehicles
+                                    </span>
+                            </li>
+                            <li>
+                                <label>
+                                    Determine VMT per Average Power Unit
+                                </label>
+                                    <div class="vmtPUForm">
+                                        <span class="comp">
+                                            <span class="val">29,940</span>
+                                            <label>
+                                                VMT per Average Power Unit
+                                            </label>
+                                        </span> <span class="sign">=</span> <span class="comp">
+                                            <span class="val">50,000</span>
+                                            <label>
+                                                VMT From Registration (MCS-150)
+                                            </label>
+                                        </span><span class="sign">÷</span> <span class="comp">
+                                            <span class="val">1.7</span>
+                                            <label>
+                                                Average Power Units
+                                            </label>
+                                        </span>
+                                    </div>
+                            </li>
+                            <li>
+                                <label>
+                                    Based on Step 1 and 2 calculate the Utilization Factor
+                                </label>
+                                    <table>
+                                        <caption>
+                                            Straight Segment
+                                        </caption>
+                                        <thead>
+                                            <tr>
+                                                <th>Meets Criteria</th>
+                                                <th>VMT per Avgerage PU</th>
+                                                <th>Utilization Factor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>&lt; 20,000</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+<img alt="Yes" src="/SMS/Images/Icons/SMS_Check.png">                                                </td>
+                                                <td>20,000 – 60,000</td>
+                                                <td class="tall">
+1.497 = <span class="inline-comp">
+                                                        <span class="val">29,940</span><label>
+                                                            VMT per
+                                                            PU
+                                                        </label>
+                                                    </span> ÷ 20,000                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>60,000 – 200,000</td>
+                                                <td>3</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>&gt; 200,000</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                </td>
+                                                <td>No Recent VMT Information</td>
+                                                <td>1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </aside>
+    </div>
+
+    <div id="footer-disclaimer"><h5> 
+    Use of SMS Data/Information</h5> 
+<h6>FAST Act of 2015:</h6>
+<p>Readers should not draw conclusions about a carrier's overall safety condition simply based on the data displayed in this system. Unless a motor carrier has received an UNSATISFACTORY safety rating under part 385 of title 49, Code of Federal Regulations, or has otherwise been ordered to discontinue operations by the Federal Motor Carrier Safety Administration, it is authorized to operate on the Nation's roadways.</p>
+<h6>Safety Measurement System:</h6>
+<p> 
+    The data in the Safety Measurement System (SMS) is performance data used by the 
+    Agency and Enforcement Community. A 
+    <img src="/SMS/Images/Icons/prioritize_small.png" alt="Carrier may be prioritized for an intervention action and roadside inspection." class="prioritizeIcon"> 
+    symbol, based on that data, indicates that FMCSA may prioritize a motor carrier 
+    for further monitoring. 
+</p> 
+<p> 
+    The 
+    <img src="/SMS/Images/Icons/prioritize_small.png" alt="Carrier may be prioritized for an intervention action and roadside inspection." class="prioritizeIcon"> 
+    symbol is not intended to imply any federal safety rating of the carrier pursuant 
+    to 49 USC 31144. Readers should not draw conclusions about a carrier's overall safety 
+    condition simply based on the data displayed in this system. Unless a motor carrier 
+    in the SMS has received an UNSATISFACTORY safety rating pursuant to 49 CFR Part 
+    385, or has otherwise been ordered to discontinue operations by the FMCSA, it is 
+    authorized to operate on the nation's roadways. 
+</p> 
+<p> 
+    Motor carrier safety ratings are available at <a href="http://safer.fmcsa.dot.gov" target="_blank">http://safer.fmcsa.dot.gov</a> and motor carrier licensing and 
+    insurance status are available at <a href="http://li-public.fmcsa.dot.gov" target="_blank"> 
+        http://li-public.fmcsa.dot.gov/</a>. 
+</p>
+
+<script type="text/javascript">function ga(){}</script></div>
+</article>
+            <footer id="fmcsa-footer">
+                <a id="fbLink" title="Website Feedback" class="FeedBackFooterBtn" href="https://csa.fmcsa.dot.gov/CSA_Feedback.aspx?defaulttag=SMS" target="_blank">
+                    Submit Feedback
+                    <img src="/SMS/Images/Icons/feed-arrow.png" alt="Website Feedback" style="margin-left: 5px;">
+                </a>
+                <address>
+                    <img src="/SMS/Images/Layout/dot_logo.png" class="dot-logo" alt="">
+                    <p class="footer_dot_label">
+                        <a href="http://www.dot.gov" target="_blank">U.S. Department of Transportation</a>
+                    </p>
+                    <p class="footer_administration_label">
+                        <a href="http://www.fmcsa.dot.gov" target="_blank">Federal Motor Carrier Safety Administration</a>
+                    </p>
+                    <p>
+                        1200 New Jersey Avenue, SE<br>
+                        Washington, DC 20590<br>
+                        855-368-4200
+                    </p>
+                    <a class="viewDesktop" href="/SMS/Home/DesktopVersion.aspx?ReturnURL=/SMS/Carrier/1010335/Overview.aspx?FirstView=True">
+                        View Desktop Website
+                    </a><a class="viewResponsive" href="/SMS/Home/MobileVersion.aspx?ReturnURL=/SMS/Carrier/1010335/Overview.aspx?FirstView=True">
+                        View Responsive Website
+                    </a>
+                </address>
+                <ul id="footer-menu-1" class="menu">
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/contact-us" title="FMCSA Main Phone Numbers" target="_blank">
+                            Contact Us
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/careers" title="" target="_blank">Careers</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/subscribe-email-updates" title="Subscribe to email updates for various topics" target="_blank">Email Subscriptions</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/forms" title="" target="_blank">Forms</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/resources-for-carrier-companies" title="" target="_blank">
+                            Resources for Carriers
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/resources-for-consumers" title="" target="_blank">
+                            Resources for Consumers
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/resources-for-drivers" title="" target="_blank">
+                            Resources
+                            for Drivers
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/foia" title="" target="_blank">FOIA</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/languages" title="FMCSA content available in Spanish, French, Simplified Chinese, Traditional Chinese, German, Japanese, Vietnamese, and others." target="_blank">Languages</a>
+                    </li>
+                    <li>
+                        <a href="http://ntl.bts.gov/" title="" target="_blank">DOT Transportation Library</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/blog/fastlane" title="DOT Blog" target="_blank">
+                            Fastlane
+                            Blog
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/copyrightattribution-notice" title="Copyright/Attribution Notice" target="_blank">Copyright/Attribution Notice</a>
+                    </li>
+                    <li>
+                        <a href="https://portal.fmcsa.dot.gov/login" title="Link for Internal and Partner User Only - Log-In Required" target="_blank">FMCSA Portal</a>
+                    </li>
+                </ul>
+                <ul class="menu" id="footer-menu-2">
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/federal-motor-carrier-safety-administration-online-privacy-policy" title="FMCSA Privacy Policy and Resources" target="_blank">Privacy Policy</a>
+                    </li>
+                    <li><a href="https://www.transportation.gov/vulnerability-disclosure-policy" target="_blank">Vulnerability Disclosure Policy</a></li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/accessibility" title="FMCSA Accessibility Information and Resources" target="_blank">Accessibility</a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/web-policies-and-resources" title="" target="_blank">
+                            DOT Web Policies &amp; Notices
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://business.usa.gov/" title="" target="_blank">BusinessUSA</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/highlights/buyamerica" title="" target="_blank">
+                            Buy America
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://www.fmcsa.dot.gov/mission/civil-rights" title="DOT Office of Civil Rights" target="_blank">Civil Rights</a>
+                    </li>
+                    <li>
+                        <a href="https://www.civilrights.dot.gov/civil-rights-awareness-enforcement/employment-related/affirmative-employment/no-fear-act" title="No Fear Act Data" target="_blank">No Fear Act Data</a>
+                    </li>
+                    <li>
+                        <a href="http://www.oig.dot.gov/Hotline" title="Office of the Inspector General Hotline" target="_blank">OIG Hotline</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/recovery" title="Information on the Recovery Act" target="_blank">
+                            Recovery Act
+                        </a>
+                    </li>
+                    <li>
+                        <a href="http://usa.gov/" title="" target="_blank">USA.gov</a>
+                    </li>
+                    <li>
+                        <a href="http://whitehouse.gov/" title="" target="_blank">WhiteHouse.gov</a>
+                    </li>
+                    <li>
+                        <a href="http://www.dot.gov/mission/open/open-government" title="" target="_blank">
+                            Open
+                            Government
+                        </a>
+                    </li>
+                </ul>
+                <div class="clear">
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlAgn3YKovOdcyBT0Nc_y5IXDxIMZdDqw" async="" defer=""></script>
+
+
+<ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" style="display: none;"></ul><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div id="usasearch_sayt" style="background: none; border: 0px; display: block; float: none; height: 0px; line-height: 0; margin: 0px; padding: 0px; position: static; width: 0px;"><ul id="ui-id-1" tabindex="0" class="ui-menu ui-widget ui-widget-content ui-autocomplete ui-front" unselectable="on" style="display: none;"></ul></div><div role="status" aria-live="assertive" aria-relevant="additions" class="ui-helper-hidden-accessible"></div><div id="automa-palette"></div><div id="simplemodal-overlay" class="simplemodal-overlay" style="opacity: 0.5; height: 552px; width: 795px; position: fixed; left: 0px; top: 0px; z-index: 1001;"></div><div id="simplemodal-container" class="simplemodal-container" style="position: fixed; height: 524px; width: 795px; z-index: 1002; left: 0px; top: 14px;"><a class="modalCloseImg simplemodal-close" title="Close"></a><div tabindex="-1" class="simplemodal-wrap" style="height: 100%; outline: 0px; width: 100%; overflow: auto;"><div class="smsModal simplemodal-data" id="ajaxModal" style=""><article id="regInfo" class="carrier-data eventPnl">
+    <h1 class="printHead">
+        <img src="/SMS/Images/Layout/sms_logo_bw.png" alt="SMS - Safety Measurement System" class="bw">
+    </h1>
+    <h2>
+        Carrier Registration <span class="asOf">
+            (as of 6/6/2025,
+            updated monthly)
+        </span> <a class="printLnk" href="javascript:print()">
+            <img src="/SMS/Images/Icons/w.print.png" alt="Print Report">
+        </a>
+    </h2>
+    <div class="modalBody" style="height: 452.4px;">
+        <div id="regBox">
+            <h3>
+                Carrier Registration Information (MCS-150 Date: <span title="" class="">05/20/2025)</span>
+                                                                </h3>
+                                                                <ul class="col1">
+                                                                    <li>
+                                                                        <label>
+                                                                            Legal Name:
+                                                                        </label>
+                                                                        <span class="dat">S G M TRUCKING &amp; EXCAVATING</span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label>
+                                                                            DBA Name:
+                                                                        </label>
+                                                                        <span class="dat"></span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label>
+                                                                            U.S. DOT#:
+                                                                        </label>
+                                                                        <span class="dat">1010335</span>
+                                                                    </li>
+                                                                    
+                                                                   
+                                                                        <li>
+                                                                            <label>
+                                                                                Address:
+                                                                            </label>
+                                                                            <span class="dat">
+                                                                                6 DARBY BROOK LN<br>ALSTEAD,
+                                                                                NH 03602
+                                                                            </span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Telephone:
+                                                                            </label>
+                                                                            <span class="dat">(603) 835-6304</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Fax:
+                                                                            </label>
+                                                                            <span class="dat"></span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Email:
+                                                                            </label>
+                                                                            <span class="dat">STMINGILS@GMAIL.COM</span>
+                                                                        </li>
+                                                                </ul>
+                                                                <ul class="col2">
+                                                                    <li>
+                                                                        <label>
+                                                                            Vehicle Miles Traveled:
+                                                                        </label>
+                                                                        <span class="dat">50,000</span>
+                                                                    </li>
+                                                                    <li>
+                                                                        <label>
+                                                                            VMT Year:
+                                                                        </label>
+                                                                        <span title="Carrier VMT Outdated" class="dat flag">2020</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Power Units:
+                                                                            </label>
+                                                                            <span class="dat">3</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                DUNS Number:
+                                                                            </label>
+                                                                            <span class="dat"></span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Drivers:
+                                                                            </label>
+                                                                            <span class="dat">1</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Carrier Operation:
+                                                                            </label>
+                                                                            <span class="dat">Interstate</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                Passenger:
+                                                                            </label>
+                                                                            <span class="dat">No</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                HM:
+                                                                            </label>
+                                                                            <span class="dat">No</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                HHG:
+                                                                            </label>
+                                                                            <span class="dat">No</span>
+                                                                        </li>
+                                                                        <li>
+                                                                            <label>
+                                                                                New Entrant:
+                                                                            </label>
+                                                                            <span class="dat">No</span>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div style="clear: left;">
+                                                                    </div>
+                                                                    <h3>Operation Classification</h3>
+                                                                    <ul class="opClass">
+                                                                            <li class="checked"><span class="chk">X</span>AUTHORIZED FOR HIRE</li>
+                                                                            <li class=""><span class="chk"></span>EXEMPT FOR HIRE</li>
+                                                                            <li class=""><span class="chk"></span>PRIVATE PROPERTY</li>
+                                                                            <li class=""><span class="chk"></span>PRIVATE PASSENGER, BUSINESS</li>
+                                                                            <li class=""><span class="chk"></span>PRIVATE PASSENGER, NON-BUSINESS</li>
+                                                                            <li class=""><span class="chk"></span>MIGRANT</li>
+                                                                            <li class=""><span class="chk"></span>U. S. MAIL</li>
+                                                                            <li class=""><span class="chk"></span>FEDERAL GOVERNMENT</li>
+                                                                            <li class="checked"><span class="chk">X</span>STATE GOVERNMENT</li>
+                                                                            <li class="checked"><span class="chk">X</span>LOCAL GOVERNMENT</li>
+                                                                            <li class=""><span class="chk"></span>INDIAN TRIBE</li>
+                                                                            <li class=""><span class="chk"></span>OTHER</li>
+                                                                    </ul>
+                                                                    <div class="clear">
+                                                                    </div>
+                                                                    <h3>Cargo Carried</h3>
+                                                                    <ul class="cargo">
+                                                                            <li class="checked"><span class="chk">X</span>GENERAL FREIGHT</li>
+                                                                            <li class=""><span class="chk"></span>HOUSEHOLD GOODS</li>
+                                                                            <li class=""><span class="chk"></span>METAL; SHEETS, COILS, ROLLS</li>
+                                                                            <li class=""><span class="chk"></span>MOTOR VEHICLES</li>
+                                                                            <li class=""><span class="chk"></span>DRIVE AWAY/TOWAWAY</li>
+                                                                            <li class=""><span class="chk"></span>LOGS, POLES, BEAMS, LUMBER</li>
+                                                                            <li class=""><span class="chk"></span>BUILDING MATERIALS</li>
+                                                                            <li class=""><span class="chk"></span>MOBILE HOMES</li>
+                                                                            <li class=""><span class="chk"></span>MACHINERY, LARGE OBJECTS</li>
+                                                                            <li class=""><span class="chk"></span>FRESH PRODUCE</li>
+                                                                            <li class=""><span class="chk"></span>LIQUIDS/GASES</li>
+                                                                            <li class=""><span class="chk"></span>INTERMODAL CONTAINERS</li>
+                                                                            <li class=""><span class="chk"></span>PASSENGERS</li>
+                                                                            <li class=""><span class="chk"></span>OIL FIELD EQUIPMENT</li>
+                                                                            <li class=""><span class="chk"></span>LIVESTOCK</li>
+                                                                            <li class=""><span class="chk"></span>GRAIN, FEED, HAY</li>
+                                                                            <li class=""><span class="chk"></span>COAL, COKE</li>
+                                                                            <li class=""><span class="chk"></span>MEAT</li>
+                                                                            <li class=""><span class="chk"></span>GARBAGE, REFUSE, TRASH</li>
+                                                                            <li class=""><span class="chk"></span>U.S. MAIL</li>
+                                                                            <li class=""><span class="chk"></span>CHEMICALS</li>
+                                                                            <li class=""><span class="chk"></span>COMMODITIES DRY BULK</li>
+                                                                            <li class=""><span class="chk"></span>REFRIGERATED FOOD</li>
+                                                                            <li class=""><span class="chk"></span>BEVERAGES</li>
+                                                                            <li class=""><span class="chk"></span>PAPER PRODUCTS</li>
+                                                                            <li class=""><span class="chk"></span>UTILITY</li>
+                                                                            <li class=""><span class="chk"></span>FARM SUPPLIES</li>
+                                                                            <li class=""><span class="chk"></span>CONSTRUCTION</li>
+                                                                            <li class=""><span class="chk"></span>WATER WELL</li>
+                                                                            <li class=""><span class="chk"></span>OTHER</li>
+                                                                    </ul>
+                                                                    <div class="clear">
+                                                                    </div>
+                                                                    <h3>Vehicle Type Breakdown</h3>
+                                                                    <table>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Vehicle Type</th>
+                                                                                <th>Owned</th>
+                                                                                <th>Term Leased</th>
+                                                                                <th>Trip Leased</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                                <tr>
+                                                                                    <th class="vehType">Straight Trucks</th>
+                                                                                    <td>2</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Truck Tractors</th>
+                                                                                    <td>1</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Trailers*</th>
+                                                                                    <td>3</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Hazmat Cargo Tank Trailers*</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Hazmat Cargo Tank Trucks</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Motor Coach</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">School Bus 1-8*</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">School Bus 9-15</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">School Bus 16+</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Mini-Bus 16+</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Van 1-8*</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Van 9-15</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Limousine 1-8*</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Limousine 9-15</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <th class="vehType">Limousine 16+</th>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                    <td>0</td>
+                                                                                </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                    <p class="puNote">
+                                                                        * Indicates power units not used by the Carrier Safety Measurement System when calculating
+                                                                        total power units.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </article></div></div></div></body>
