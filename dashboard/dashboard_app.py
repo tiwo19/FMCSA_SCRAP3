@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import json
+import os
 from datetime import datetime
 from io import StringIO
 from streamlit_autorefresh import st_autorefresh
@@ -13,7 +14,8 @@ st.title("FMCSA Carrier Dashboard")
 st_autorefresh(interval=30 * 1000, key="datarefresh")
 # Load data
 def load_data():
-    with open("Scraper/fmcsa_register_enriched.json", "r") as f:
+    DATA_PATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "Scraper", "fmcsa_register_enriched.json")
+    with open(DATA_PATH, "r") as f:
         data = json.load(f)
     # Flatten insurance fields for DataFrame
     for d in data:

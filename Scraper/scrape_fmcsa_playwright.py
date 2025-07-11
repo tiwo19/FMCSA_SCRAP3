@@ -121,8 +121,8 @@ async def fetch_sms_registration_details(page, usdot):
         print(f"[SMS][FALLBACK] Trying direct CarrierRegistration.aspx for USDOT {usdot}: {fallback_url}")
         for fallback_attempt in range(1, 4):
             try:
-                context = page.context
-                new_page = await context.new_page()
+                new_context = await page.browser.new_context()
+                new_page = await new_context.new_page()
                 try:
                     from playwright_stealth import stealth_async as stealth_async_fallback
                     await stealth_async_fallback(new_page)
@@ -138,11 +138,13 @@ async def fetch_sms_registration_details(page, usdot):
                 if "Legal Name:" in reg_html or "MCS-150 Date:" in reg_html:
                     html = reg_html
                     await new_page.close()
+                    await new_context.close()
                     print(f"[SMS][FALLBACK] Successfully loaded CarrierRegistration.aspx for USDOT {usdot} (attempt {fallback_attempt})")
                     break
                 else:
                     print(f"[SMS][FALLBACK] Fallback page content blank or irrelevant (attempt {fallback_attempt})")
                     await new_page.close()
+                    await new_context.close()
             except Exception as e:
                 print(f"[SMS][FALLBACK][ERROR] Could not load fallback CarrierRegistration.aspx for USDOT {usdot} (attempt {fallback_attempt}): {e}")
             await page.wait_for_timeout(3000 * fallback_attempt)
@@ -495,7 +497,7 @@ async def fetch_safer_snapshot(page, mc_number):
     # Always reload the SAFER query page before each search
     import random
     # Add random delay to avoid rate-limiting
-    await asyncio.sleep(random.uniform(2, 5))
+    await asyncio.sleep(random.uniform(15, 30))
     await page.goto("https://safer.fmcsa.dot.gov/CompanySnapshot.aspx", timeout=120000)
     await page.wait_for_selector('input[name="query_param"][value="MC_MX"]', timeout=120000)
     await page.check('input[name="query_param"][value="MC_MX"]')
@@ -949,8 +951,7 @@ async def process_mc_batch(mc_batch, base_entry_map):
                 except Exception as e:
                     print(f"Error fetching SAFER for {mc_number} (Attempt {attempt}): {e}")
                     if attempt < max_retries:
-                        await asyncio.sleep(3 * attempt)
-                    else:
+                        await asyncio.sleep(random.uniform(20, 40))  # Longer backoff for stealth                    else:
                         print(f"[ERROR] Giving up on MC: {mc_number} after {max_retries} attempts.")
             await page.close()
             return entry
@@ -970,8 +971,8 @@ def main_parallel():
     import json
     from collections import defaultdict
     # Production batch size and workers for EC2 c6i.8xlarge
-    batch_size = 10
-    max_workers = 3
+    batch_size = 2
+    max_workers = 1
     progress_file = 'fmcsa_progress.jsonl'
 
     # Step 1: Scrape register dates and details (single process)
@@ -984,10 +985,9 @@ def main_parallel():
             print(f"Found {len(dates)} dates.")
 
             all_entries = []
-            # --- TEST: Only process the first date for speed ---
-            if dates:
-                date = dates[0]
-                print(f"[TEST MODE] Only scraping details for {date['display']}...")
+            # --- PRODUCTION: Process ALL dates ---
+            for date in dates:
+                print(f"Scraping details for {date['display']}...")
                 try:
                     entries = await fetch_register_details(page, date['pd_date'])
                     print(f"[REGISTER] Sample entry for {date['display']}: {entries[0] if entries else 'No entries'}")
