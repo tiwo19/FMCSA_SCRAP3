@@ -970,8 +970,8 @@ def main_parallel():
     import json
     from collections import defaultdict
     # Production batch size and workers for EC2 c6i.8xlarge
-    batch_size = 100
-    max_workers = 15
+    batch_size = 10
+    max_workers = 3
     progress_file = 'fmcsa_progress.jsonl'
 
     # Step 1: Scrape register dates and details (single process)

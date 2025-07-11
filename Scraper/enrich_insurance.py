@@ -21,7 +21,8 @@ TWO_CAPTCHA_API_KEY = "2f361c440d14c4c56ae93cb13ccc38d3"
 INPUT_JSON = "fmcsa_register_enriched.json"
 OUTPUT_JSON = "fmcsa_register_enriched.json"
 BATCH_SIZE = 100
-MAX_WORKERS = 15
+BATCH_SIZE = 10
+MAX_WORKERS = 3
 
 
 async def enrich_insurance_for_mc_async(mc_entry):

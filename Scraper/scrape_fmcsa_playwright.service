@@ -5,8 +5,8 @@ After=network.target
 [Service]
 Type=simple
 User=ubuntu
-WorkingDirectory=/home/ubuntu/FMCSA_Scrapper/Scraper
-ExecStart=/home/ubuntu/FMCSA_Scrapper/env/bin/python3 /home/ubuntu/FMCSA_Scrapper/Scraper/scrape_fmcsa_playwright.py
+WorkingDirectory=/home/ubuntu/FMCSA_SCRAP3/Scraper
+ExecStart=/home/ubuntu/fmcsa-venv/bin/python3 /home/ubuntu/FMCSA_SCRAP3/Scraper/scrape_fmcsa_playwright.py
 Restart=always
 RestartSec=10
 Environment=PYTHONUNBUFFERED=1
