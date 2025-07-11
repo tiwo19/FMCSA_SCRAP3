@@ -3,11 +3,14 @@ import pandas as pd
 import json
 from datetime import datetime
 from io import StringIO
+from streamlit_autorefresh import st_autorefresh
 
 st.set_page_config(page_title="FMCSA Carrier Dashboard", layout="wide")
 
 st.title("FMCSA Carrier Dashboard")
 
+# --- Auto-refresh every 30 seconds (adjust interval as needed) ---
+st_autorefresh(interval=30 * 1000, key="datarefresh")
 # Load data
 def load_data():
     with open("Scraper/fmcsa_register_enriched.json", "r") as f:
@@ -121,3 +124,4 @@ with st.expander("Export Options", expanded=True):
 # --- New MCs Report removed (now a filter only) ---
 
 st.caption("Dashboard auto-refresh: Reload this page after updating the JSON file. For automation, schedule the scraper to run monthly and overwrite the JSON.")
+st.caption("Dashboard auto-refreshes every 30 seconds. For automation, schedule the scraper to run monthly and overwrite the JSON.")
