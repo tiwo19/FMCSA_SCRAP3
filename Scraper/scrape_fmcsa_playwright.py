@@ -1074,26 +1074,21 @@ def main_parallel():
     # Only keep ACTIVE carriers
     filtered_entries = [entry for entry in batch_results if entry.get('usdot_status', '').upper() == 'ACTIVE']
 
-    # Step 3: Normalize, deduplicate, and export
+    # Step 3: Normalize and export (NO deduplication)
     flat_entries = [flatten(e) for e in filtered_entries]
-    # Print MC and insurance_link before export for debug
     for entry in flat_entries:
         print(f"[EXPORT DEBUG] MC: {entry.get('mc_number')} insurance_link: {entry.get('insurance_link')}")
-    # Ensure all insurance fields are present as columns
     insurance_fields = [
         'insurance_form', 'insurance_type', 'insurance_insurance_carrier', 'insurance_policy_surety',
         'insurance_posted_date', 'insurance_effective_date', 'insurance_cancellation_date', 'insurance_insurance_status',
         'insurance_coverage_from', 'insurance_coverage_to'
     ]
-    # Add missing insurance columns as empty if not present
     for entry in flat_entries:
         for field in insurance_fields:
             if field not in entry:
                 entry[field] = ''
-        # Remove the raw 'insurance' dict from each entry if present
         if 'insurance' in entry:
             del entry['insurance']
-    # Ensure all columns are strings for CSV export
     for entry in flat_entries:
         for k, v in entry.items():
             if v is None:
@@ -1104,40 +1099,6 @@ def main_parallel():
     import tempfile
     df = pd.DataFrame(flat_entries)
     if not df.empty:
-        # Deduplicate by normalized mc_number, keeping the record with a non-empty insurance_link if available
-        def normalize_mc(mc):
-            import re
-            if not mc:
-                return mc
-            return re.sub(r"\s*-[A-Z]$", "", mc).replace("  ", " ").strip()
-
-        deduped = {}
-        for _, row in df.iterrows():
-            mc = row.get('mc_number', '')
-            norm_mc = normalize_mc(mc)
-            if not norm_mc:
-                continue
-            def has_sms_fields(r):
-                return bool(r.get('email')) or bool(r.get('legal_name')) or bool(r.get('mcs_150_date'))
-            if norm_mc not in deduped:
-                deduped[norm_mc] = row
-                print(f"[DEDUP] Adding new MC {norm_mc}: email={row.get('email')}, legal_name={row.get('legal_name')}")
-            else:
-                current = deduped[norm_mc]
-                if has_sms_fields(row) and not has_sms_fields(current):
-                    deduped[norm_mc] = row
-                    print(f"[DEDUP] Replacing MC {norm_mc} with enriched SMS: email={row.get('email')}, legal_name={row.get('legal_name')}")
-                elif has_sms_fields(row) and has_sms_fields(current):
-                    if not current.get('insurance_link') and row.get('insurance_link'):
-                        deduped[norm_mc] = row
-                        print(f"[DEDUP] Replacing MC {norm_mc} with better insurance_link: {row.get('insurance_link')}")
-                elif not has_sms_fields(row) and has_sms_fields(current):
-                    pass
-                else:
-                    if not current.get('insurance_link') and row.get('insurance_link'):
-                        deduped[norm_mc] = row
-                        print(f"[DEDUP] Replacing MC {norm_mc} with insurance_link: {row.get('insurance_link')}")
-        df = pd.DataFrame(list(deduped.values()))
         if 'register_date' in df.columns:
             df['register_date'] = df['register_date'].apply(normalize_date)
         if 'decision_date' in df.columns:
@@ -1169,8 +1130,6 @@ def main_parallel():
         else:
             print(f"[EXPORT][DEBUG] Not enough rows to print row 4. Row count: {len(df)}")
         records = df.to_dict(orient="records")
-        # Atomic write for CSV
-        import tempfile
         with tempfile.NamedTemporaryFile('w', delete=False, dir='.', encoding='utf-8', newline='') as tf:
             writer = csv.DictWriter(tf, fieldnames=desired_order, quoting=csv.QUOTE_ALL)
             writer.writeheader()
@@ -1179,7 +1138,6 @@ def main_parallel():
             temp_csv = tf.name
         import os
         os.replace(temp_csv, OUTPUT_CSV)
-        # Atomic write for JSON
         with tempfile.NamedTemporaryFile('w', delete=False, dir='.', encoding='utf-8') as tf:
             import json
             json.dump(records, tf, indent=2)
